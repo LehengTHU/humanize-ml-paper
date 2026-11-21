@@ -10,7 +10,7 @@
 
 <a href="https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/"><img src="media/demo.gif" width="800" alt="博客开场影片：智能体写出一页草稿，再按 skill 的风格手册改稿"></a>
 
-`art-of-writing` 是一个写 ML 会议论文（ICLR、NeurIPS、ICML）的 agent skill。我们从人类撰写的规范论文中提炼写法，做成了流程、规则、短语库和检查工具。装备该 skill 的智能体能写出流畅有逻辑的文字，且能通过 AI 检测器，甚至能一次写完一篇会议论文。
+`art-of-writing` 是一个写 ML 会议论文（ICLR、NeurIPS、ICML）的 agent skill。我们从人类撰写的规范论文中提炼写法，做成了流程、规则、短语库和检查工具。装备该 skill 的智能体能写出流畅有逻辑的文字，且能降低 AI 检测率，甚至能一次写完一篇会议论文。
 
 完整研究见[博客](https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/)，也可以看 [37 秒的开场影片](media/demo.mp4)。
 

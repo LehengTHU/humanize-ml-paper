@@ -10,7 +10,7 @@ English | [中文](README.zh-CN.md)
 
 <a href="https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/"><img src="media/demo.gif" width="800" alt="Opening film of the blog post: an agent writes a draft page and revises it with the skill's style sheet"></a>
 
-`art-of-writing` is an agent skill for writing ML conference papers (ICLR, NeurIPS, ICML). We distilled the writing practices of human-written papers that follow academic conventions into a workflow, rules, a phrase bank and checking tools. An agent equipped with the skill can write fluent, logical prose that passes AI detectors and can even write a complete conference paper in one run.
+`art-of-writing` is an agent skill for writing ML conference papers (ICLR, NeurIPS, ICML). We distilled the writing practices of human-written papers that follow academic conventions into a workflow, rules, a phrase bank and checking tools. An agent equipped with the skill can write fluent, logical prose with a lower AI detection rate and can even write a complete conference paper in one run.
 
 Read the [blog post](https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/) for the full study, or watch the [37-second film](media/demo.mp4).
 
