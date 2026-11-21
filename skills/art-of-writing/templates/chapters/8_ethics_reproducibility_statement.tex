@@ -1,0 +1,34 @@
+% ICLR only: unnumbered statements after Conclusion/Acknowledgments and before
+% the references, not counted (ICLR 2027 kit l.397-444). NeurIPS: Broader
+% Impacts in the appendix + checklist. ICML: \clearpage \section*{Impact
+% Statement} (main_skeleton_icml.tex). Details: references/venues.md §1.5.
+%
+% ICLR 2027: REQUIRED, <= 1 page (K-ICLR27 l.397-412; iclr.cc 2027 AI Policy).
+% Disclosure is REQUIRED if generative AI was used to: generate synthetic data;
+% develop theoretical models or conceptual frameworks; formulate mathematical
+% claims; provide critical ingredients for proofs or help write them; propose or
+% refine hypotheses; design or give feedback on the research methodology or
+% experiments; implement methods; assist with translation; clean or reformat
+% data; support qualitative and thematic data analysis; interpret results.
+% RECOMMENDED for: drafting or editing text, figures, code edits, experimental
+% parameters, literature search and summaries, brainstorming, references, titles.
+% The kit's text has four parts: required tasks AI WAS used for, required tasks
+% it was NOT used for, required tasks that do not apply, then "We have reviewed
+% all AI-assisted work" + how it was checked + responsibility. A 2026-style
+% statement that names only ideation, experiment design, data analysis and
+% interpretation misses implementation, synthetic data, proofs, translation and
+% data cleaning: name every required category below.
+\section*{AI Use Statement}
+We did not use generative AI tools to generate data, develop theory, formulate or prove mathematical claims, propose or refine hypotheses, design or give feedback on the methodology or experiments, implement methods, translate, clean or reformat data, analyse data, or interpret results. We used them to <copy-edit the wording of Sections 1-3> and <draft plotting scripts>. We have reviewed all AI-assisted work (<how, e.g., all plotting code was run and its output checked by one author>) and take responsibility for the final content of this paper.
+
+% Ethics: three short paragraphs [some] -- aim and data, possible misuse, limits of the guarantee.
+\section*{Ethics Statement}
+This work aims to <goal>, which can benefit <stakeholders>. Our experiments use only public models and datasets, and they involve neither private data nor human subjects.
+
+We also recognize a possible misuse: <technique> might, for instance, be used to <misuse>.
+
+X improves <property>, but it cannot fully guarantee <guarantee>. We encourage further work on <direction>.
+
+% Reproducibility: ONE paragraph that points to sections, appendix and code; it does not repeat them.
+\section*{Reproducibility Statement}
+We take several steps to make our results reproducible. An anonymous implementation is available at \url{https://anonymous.4open.science/r/XXXX}. Section~\ref{sec:methodology} describes the method and Section~\ref{sec:exp-setup} the experimental setup. Appendix~\ref{apdx:impl-details} lists the implementation details, hardware, hyperparameters, data selection and prompts. Additional analyses appear in Section~\ref{sec:experiments} and Appendix~\ref{apdx:experiments}.

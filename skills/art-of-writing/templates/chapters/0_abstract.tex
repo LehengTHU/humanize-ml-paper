@@ -1,0 +1,29 @@
+% Logic outline (keep as comments [some]):
+%   gap pair -> proposal -> mechanism -> (training signal) -> qualitative result
+% Rules: ONE paragraph; NO numbers, NO citations, NO dataset names [all].
+% Length at most 250 words [most]; 120-200 at ICML/NeurIPS [current]; 5-9
+% sentences (ICML template: 4-6). Expand every acronym; an acronym method name
+% gets bold initials [some], a plain name may stay plain [some]. Present tense.
+% Code link only at camera-ready.
+% Paper-type variants of S6-S7: references/paper_types.md.
+\begin{abstract}
+% S1 context + difficulty (concessive opener)
+Although <task> matters for many real-world applications, <model family> still struggle with it because <reason>.
+% S2 current paradigm / named prior work
+A recent line of work, <paradigm>, handles <task> by <mechanism>.
+% S3 gap as a pair
+Yet this <approach> has two key weaknesses: (i) <drawback 1>; and (ii) <drawback 2>.
+% S5 proposal
+To resolve both, we propose \textbf{X} (\textbf{X}xx \textbf{Y}yy), which <key ingredient in one clause> for more <epithet> <task>.
+% S6 mechanism -- pick the variant of the paper type:
+%   component method (W): "Specifically, <component A> in X acts only when <condition>, while <component B> <acts> as soon as <condition>."
+%   objective method (T): "Specifically, X treats <object> as learnable and trains it under two objectives, <A> and <B>. <A> keeps .... <B> ensures ...."
+%   reward method (R):    "Specifically, <the signal is produced by ...>, and <how the signal improves as training proceeds>."
+Specifically, X <achieves objective A> through <mechanism A>, and <achieves objective B> through <mechanism B>.
+% S7 training signal (training-based methods only [some]):
+% We learn these behaviours with <signals> inside <training>, which reward <behavior A> and <behavior B>, respectively.
+% S8 qualitative result (firm but bounded)
+Experiments with several <models> on <tasks> show that X improves <metric> while preserving <other property>.
+% S10 camera-ready only:
+% Our code is available at \url{https://anonymous.4open.science/r/XXXX}.
+\end{abstract}

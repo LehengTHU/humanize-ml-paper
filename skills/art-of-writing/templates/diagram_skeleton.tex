@@ -1,0 +1,51 @@
+% target-width-in: 6.10
+% Starter for a framework / concept diagram (references/figures_tables.md section 5). Copy it to
+% figures/src/<name>.tex, set the target width to the printed width of the float (ICML: 3.25 = \columnwidth,
+% 6.10 = figure* at 0.9\textwidth, 6.75 = \textwidth; ICLR / NeurIPS: 4.95 = 0.9\textwidth, 5.5 = \textwidth,
+% 2.64 = wrapfigure 0.48\textwidth), then build and LOOK:
+%   python3 <skill>/scripts/render_diagram.py figures/src/<name>.tex --out-dir figures/framework --check
+% Place every node relative to another (right=, below=, |-, -|, fit); never hand-compute coordinates.
+% Style names and helpers: templates/housediagram.sty and assets/diagram_src/style_sheet.png.
+\documentclass[tikz,border=1pt]{standalone}
+\usepackage{housediagram}
+\begin{document}
+\begin{tikzpicture}
+  % 1. a lane of concrete example items (the running example; quotes in \hdquote)
+  \node[chip, tagged=1, text width=74pt] (c1) {\hdquote{first example}};
+  \node[chip, tagged=2, text width=74pt, below=4.5pt of c1] (c2) {\hdquote{second example}};
+  \node[chip, tagged=3, text width=74pt, below=4.5pt of c2] (c3) {\hdquote{third example}};
+  \hdlane{pool}{(c1)(c3)}
+  \node[input square, left=18pt of pool] (D) {$\mathcal{D}$};
+  \draw[data flow] (D) -- (pool);
+
+  % 2. modules: white inside, role colour in the outline; exactly one filled focal module (hero)
+  \node[trainable, minimum width=80pt, minimum height=30pt, right=29pt of pool] (A)
+    {\hdtitle{Component A}\\[0.6pt] $w_i = g_\phi(x_i)$};
+  \node[hero, minimum width=80pt, minimum height=33pt, right=31pt of A] (B)
+    {\hdtitle{Component B}\\[1pt] $p_t(x_i) \propto w_i$};
+  \node[trainable, minimum width=48pt, minimum height=33pt, right=31pt of B] (M)
+    {\hdtitle{Model}\\[1pt] $f_\theta$};
+  \draw[data flow] (pool) -- node[note, above=0.5pt] {$x_i$} (A);
+  \draw[score flow] (A) -- node[note, above=0.5pt] {$w_i$} (B);
+  \draw[data flow] (B) -- node[note, above=0.5pt] {$\mathcal{S}_t$} (M);
+
+  % 3. the loop: solid amber feedback with its label on a white pill
+  \coordinate (fb) at ([yshift=-12pt]pool.south);
+  \draw[feedback flow] (M.south) -- (M.south |- fb) -- node[pill] {$\Delta\ell$ updates $\phi$} (A.south |- fb) -- (A.south);
+
+  % 4. stage headers on one baseline, centred on their columns
+  \coordinate (H) at ([yshift=7pt]pool.north);
+  \node[header, anchor=base] at (pool.north |- H) {Examples};
+  \node[header, anchor=base] at (A.north |- H) {Stage A};
+  \node[header, anchor=base] at (B.north |- H) {Stage B};
+  \node[header, anchor=base] at (M.north |- H) {Training};
+
+  % 5. one compact legend row; keep only the keys a reader cannot infer
+  \matrix[legend row, anchor=north] at ([yshift=-9pt]$(D.west |- fb)!0.5!(M.east |- fb)$) {
+    \pic {key box={trainable}{Trainable}}; &
+    \pic {key box={hero}{Fixed rule}}; &
+    \pic {key arrow={score flow}{Score}}; &
+    \pic {key arrow={feedback flow}{Feedback}}; \\
+  };
+\end{tikzpicture}
+\end{document}

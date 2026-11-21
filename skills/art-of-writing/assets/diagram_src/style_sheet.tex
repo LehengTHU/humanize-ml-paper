@@ -1,0 +1,93 @@
+% target-width-in: 6.75
+% style_sheet -- every style and helper of templates/housediagram.sty at print size, each tagged with its name.
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{housediagram}
+\newcommand\sname[1]{{\fontsize{5.6}{6.5}\selectfont\ttfamily\color{hdmuted}#1}}
+\newcommand\sheetrow[2]{\node[headline, anchor=base west] at (0,#1) {#2};
+  \draw[hdbar, line width=0.5pt] (0,#1-3.5pt) -- (478pt,#1-3.5pt);}
+\begin{document}
+\begin{tikzpicture}[role navy/.style={role flow=hdnavy}, role rose/.style={role flow=hdrose}]
+  % ------------------------------------------------------------------ type
+  \sheetrow{0pt}{Type: three tiers, bold sans labels, Latin Modern math}
+  \node[headline, anchor=west] (h1) at (0,-17pt) {Headline 9 pt \textcolor{hdcoral}{problem} / \textcolor{hdnavy}{solution}};
+  \node[header, anchor=west] (h2) at ([xshift=16pt]h1.east) {Title / header 7.5 pt};
+  \node[note, anchor=west, font=\hdlabelfont] (h3) at ([xshift=16pt]h2.east) {Label 7 pt};
+  \node[note, anchor=west] (h4) at ([xshift=16pt]h3.east) {action / note 7 pt italic};
+  \node[note, anchor=west, font=\hdbodyfont] (h5) at ([xshift=16pt]h4.east) {$p_t(x_i) \propto w_i\, q_i$, $\mathcal{B}_t$, $f_\theta$};
+  \foreach \n/\t in {h1/headline, h2/header, h3/key label, h4/note, h5/\textbackslash hdbodyfont}
+    \node[anchor=north west, inner sep=0pt] at ([yshift=-2pt]\n.south west) {\sname{\t}};
+
+  % ------------------------------------------------------------------ modules
+  \sheetrow{-42pt}{Modules: colour in the outline; one filled focal module per figure}
+  \foreach \s/\t [count=\i] in {trainable/Trainable, frozen/Frozen, neutral/Neutral, state/State,
+                                hero/Fixed rule, hero rose/Trainable, hero gradient/Shared, ghost/Inactive}{
+    \node[\s, minimum width=50pt, minimum height=26pt] (m\i) at ({27pt + (\i-1)*60pt}, -66pt) {\hdtitle{\t}\\[0.5pt] $g_\phi(x)$};
+    \node[anchor=north, inner sep=0pt] at ([yshift=-4pt]m\i.south) {\sname{\s}};
+  }
+
+  % ------------------------------------------------------------------ items
+  \sheetrow{-104pt}{Items: chips hold quoted examples, tokens hold ids; dropped = dots}
+  \node[input square] (i1) at (9pt,-127pt) {$\mathcal{D}$};
+  \node[chip, tagged=1, anchor=west] (i2) at (34pt,-127pt) {\hdquote{2 + 3 = ?}};
+  \node[chip selected, anchor=west] (i3) at ([xshift=10pt]i2.east) {\hdquote{Sort [3, 1, 2]}};
+  \node[chip dropped, anchor=west] (i4) at ([xshift=10pt]i3.east) {\hdquote{Add 2 and 3}};
+  \node[token, anchor=west] (i5) at ([xshift=16pt]i4.east) {1};
+  \node[token selected, anchor=west] (i6) at ([xshift=34pt]i5.east) {2};
+  \node[token dropped, anchor=west] (i7) at ([xshift=36pt]i6.east) {3};
+  \hdstack[3]{i8}{token}{([xshift=34pt]i7.east)}{$x$}
+  \node[operator, anchor=west] (i9) at ([xshift=20pt]i8.east) {$\times$};
+  \node[badge, anchor=west] (i10) at ([xshift=12pt]i9.east) {$\pi$};
+  \node[num tag, anchor=west] (i11) at ([xshift=12pt]i10.east) {4};
+  \foreach \n/\t in {i1/input square, i2/{chip, tagged=1}, i3/chip selected, i4/chip dropped, i5/token,
+                     i6/token selected, i7/token dropped, i8/\textbackslash hdstack, i9/operator, i10/badge, i11/num tag}
+    \node[anchor=north, inner sep=0pt] at ([yshift=-5pt]\n.south) {\sname{\t}};
+
+  % ------------------------------------------------------------------ containers
+  \sheetrow{-160pt}{Containers: lanes group items; cards and frames hold panels}
+  \begin{scope}[no shadow]
+    \node[token] (l1) at (16pt,-190pt) {1}; \node[token, right=4.5pt of l1] (l2) {2};
+  \end{scope}
+  \hdlane{L}{(l1)(l2)}
+  \node[token] (cc) at (96pt,-190pt) {1};   \hdcard{C}{(cc)([xshift=20pt]cc.east)}
+  \node[token] (pp) at (176pt,-190pt) {1};  \hdperforated{P}{(pp)([xshift=20pt]pp.east)}
+  \node[token, no shadow] (ff) at (262pt,-190pt) {1}; \hdframe{F}{(ff)([xshift=20pt]ff.east)}
+  \node[token] (gg) at (352pt,-190pt) {1}; \node[token, right=4.5pt of gg] (gg2) {2}; \hdgroup{hdcoral}{G}{(gg)(gg2)}
+  \node[callout box=hdnavy, anchor=west] (cb) at (412pt,-194pt) {\hdtitle{Verdict}};
+  \node[token selected] (ct) at ([yshift=18pt]cb.north) {1};
+  \hdtail[hdnavy]{cb}{ct}
+  \foreach \n/\t in {L/\textbackslash hdlane, C/\textbackslash hdcard, P/\textbackslash hdperforated,
+                     F/\textbackslash hdframe, G/\textbackslash hdgroup, cb/callout box + \textbackslash hdtail}
+    \node[anchor=north, inner sep=0pt] at ([yshift=-5pt]\n.south) {\sname{\t}};
+
+  % ------------------------------------------------------------------ connectors
+  \sheetrow{-238pt}{Connectors: grey data, role colour, dashed amber score, amber feedback}
+  \foreach \s/\t [count=\i] in {data flow/data flow, role navy/{role flow=hdnavy}, role rose/{role flow=hdrose},
+                                score flow/score flow, feedback flow/feedback flow, ghost flow/ghost flow}{
+    \draw[\s] ({(\i-1)*70pt}, -258pt) -- ++(48pt,0);
+    \node[anchor=north west, inner sep=0pt] at ({(\i-1)*70pt}, -263pt) {\sname{\t}};
+  }
+  \draw[data flow] (418pt,-252pt) -- ++(18pt,0) |- ++(18pt,-14pt);
+  \node[anchor=north west, inner sep=0pt] at (412pt,-270pt) {\sname{rounded elbow}};
+  \draw[plain line] (0,-288pt) -- node[pill] {$\Delta\ell$ updates $\phi$} ++(90pt,0);
+  \node[anchor=north west, inner sep=0pt] at (0,-295pt) {\sname{pill on a line}};
+  \draw[guide line] (120pt,-288pt) -- ++(48pt,0);
+  \node[anchor=north west, inner sep=0pt] at (120pt,-295pt) {\sname{guide line}};
+  \draw[brace] (196pt,-292pt) -- (250pt,-292pt);
+  \node[anchor=north west, inner sep=0pt] at (196pt,-297pt) {\sname{brace}};
+  \pic at (284pt,-288pt) {good}; \pic at (300pt,-288pt) {bad}; \pic at (316pt,-288pt) {frozen};
+  \node[anchor=north west, inner sep=0pt] at (279pt,-297pt) {\sname{pics: good, bad, frozen}};
+  \fill[score bar] (366pt,-290.6pt) rectangle ++(24pt,5.2pt);
+  \path[penalty bar] (390pt,-290.6pt) rectangle ++(16pt,5.2pt);
+  \node[anchor=north west, inner sep=0pt] at (366pt,-297pt) {\sname{score bar + penalty bar}};
+
+  % ------------------------------------------------------------------ legend
+  \sheetrow{-318pt}{Legend: one compact row, flat icons, no frame}
+  \matrix[legend row, anchor=west] at (0,-337pt) {
+    \pic {key box={trainable}{Trainable}}; & \pic {key box={hero}{Fixed rule}}; &
+    \pic {key pair={token selected}{token dropped}{Selected / skipped}}; &
+    \pic {key arrow={score flow}{Score}}; & \pic {key arrow={feedback flow}{Feedback}}; &
+    \pic {key mark={bad}{Lost}}; \\
+  };
+  \node[anchor=north west, inner sep=0pt] at (0,-347pt) {\sname{\textbackslash matrix[legend row] with key box / key pair / key arrow / key mark}};
+\end{tikzpicture}
+\end{document}

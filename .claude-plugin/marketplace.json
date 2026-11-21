@@ -1,0 +1,15 @@
+{
+  "name": "art-of-writing",
+  "description": "The art-of-writing skill for ML conference papers",
+  "owner": {
+    "name": "Leheng Sheng",
+    "url": "https://github.com/LehengTHU"
+  },
+  "plugins": [
+    {
+      "name": "art-of-writing",
+      "source": "./",
+      "description": "Write or revise ML conference papers (ICLR, NeurIPS, ICML) in the style of human-written papers that follow academic conventions."
+    }
+  ]
+}

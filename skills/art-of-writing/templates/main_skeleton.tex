@@ -1,0 +1,60 @@
+%% main_skeleton.tex -- main file in the house project layout.
+%% Copy to the paper folder as the venue-named main file (house practice keeps
+%% the kit's stem: iclr2027_conference.tex / neurips_2026.tex / example_paper.tex),
+%% next to the venue style files, preamble.tex, references.bib and chapters/.
+%% Build:  tectonic -X compile main.tex        (or latexmk -pdf)
+%% Default header: ICLR 2027. For NeurIPS / ICML swap the header block using
+%% the VENUE NOTES at the top of preamble.tex; keep everything else.
+
+\documentclass{article}
+\PassOptionsToPackage{table}{xcolor}      % must precede the venue style
+\usepackage{iclr2027_conference,times}
+\input{math_commands.tex}                  % official ICLR notation file (\Eqref{})
+\newcommand{\VenueLinks}{\hypersetup{colorlinks=true, linkcolor=red,
+    filecolor=magenta, urlcolor=cyan, citecolor=cyan}}
+\input{preamble}
+
+% ---- Concept table (references/concepts.md): 2-5 core (max 6) + <= 6 framing terms.
+% Borrow the literature's term before coining; one concept = one exact phrase; echo core concepts
+% (same phrase, unmarked) in the Methodology, Experiments and Conclusion.
+% Term table (references/concepts.md section 3): every key term needs a citation key + a quote (<= 15 words)
+% copied from the cited paper, same sense; plain / coined otherwise (coined <= 2); "fixed" terms are not exempt.
+% concept: <core concept A> | core | borrowed: <citekey> "<quote from the cited paper, same sense>" | <definition>
+% concept: <core concept B> | core | composed: <part> (<citekey> "<quote>") + <part> (plain) | <definition>
+% concept: <framing term> | framing | borrowed: <citekey> "<quote>" | <definition>
+% term: <component / metric / recurring noun> | borrowed: <citekey> "<quote>" | <definition> | other senses: <none or list>
+% epithet: <two-word method epithet = negation of the two drawback labels; verbatim in abstract, intro, Methodology opener, Conclusion>
+% \showconceptsfalse      % uncomment for the submitted / camera-ready PDF (black text)
+
+% Title: "Verb-ing <Object> with <Key Ingredient>" [most] or
+% "<Hook>: <Descriptive Subtitle>" [some]. Sober; no hype, no teasing question.
+% Keep this paper's rejected candidates commented here [some].
+\title{Verb-ing Object with Key Ingredient}
+
+\author{Anonymous Authors}    % hidden until \iclrfinalcopy
+
+% \iclrfinalcopy % camera-ready only
+\begin{document}
+
+\maketitle
+\suppressfloats[t]  % [skill choice], not house practice. It keeps the teaser off
+                   % page 1 so that it lands at the top of p2, where a one-column
+                   % teaser usually settles by float placement alone. Delete it to
+                   % allow a page-1 results figure under the abstract [some].
+
+\input{chapters/0_abstract}
+\input{chapters/1_introduction}
+\input{chapters/2_preliminary}
+\input{chapters/3_methodology}
+\input{chapters/4_experiments}
+% \input{chapters/5_related_work}   % Related Works lives in Appendix A [most]
+\input{chapters/6_conclusion}      % Limitations + Conclusion (+ Acknowledgments)
+\input{chapters/8_ethics_reproducibility_statement}   % ICLR only; before references
+
+\bibliography{references}
+\bibliographystyle{iclr2027_conference}
+
+\input{chapters/7_appendix}
+% NeurIPS: \clearpage \input{checklist}
+
+\end{document}

@@ -1,0 +1,24 @@
+%% env_test.tex -- smoke test for the LaTeX setup (used by scripts/check_env.sh).
+%% It loads the shared preamble without any venue kit, so it builds before you
+%% download the official style files.
+\documentclass{article}
+\usepackage{times}
+\input{preamble}
+\begin{document}
+\section{Setup check}
+If this PDF shows a table, an equation and a small diagram, the LaTeX setup works.
+\begin{equation}
+  \mathcal{L}(\theta) = -\sum_{i=1}^{n} \log p_\theta(y_i \mid x_i).
+\end{equation}
+\begin{table}[h]\centering\small
+\begin{tabular}{lcc}\toprule
+Method & Acc. & F1 \\ \midrule
+Baseline & -- & -- \\
+Ours & -- & -- \\ \bottomrule
+\end{tabular}
+\caption{Placeholder table.}
+\end{table}
+\begin{center}
+\begin{tikzpicture}\draw[rounded corners] (0,0) rectangle (2,1) node[midway]{box};\draw[->] (2,0.5) -- (3,0.5);\end{tikzpicture}
+\end{center}
+\end{document}

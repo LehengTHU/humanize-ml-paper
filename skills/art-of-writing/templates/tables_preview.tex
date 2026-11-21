@@ -1,0 +1,19 @@
+%% tables_preview.tex -- harness that renders every sample in tables.tex, one
+%% per page (tables.tex separates them with \clearpage). Build next to the ICLR
+%% style files (iclr2027_conference.sty/.bst, math_commands.tex, fancyhdr.sty,
+%% natbib.sty), preamble.tex and references.bib:
+%%   tectonic -X compile tables_preview.tex
+%% The only expected warnings are undefined citations if references.bib is absent.
+\documentclass{article}
+\PassOptionsToPackage{table}{xcolor}
+\usepackage{iclr2027_conference,times}
+\input{math_commands.tex}
+\newcommand{\VenueLinks}{\hypersetup{colorlinks=true, linkcolor=red,
+    filecolor=magenta, urlcolor=cyan, citecolor=cyan}}
+\input{preamble}
+\begin{document}
+Body-text reference line: the table text below should never print larger than this sentence.
+\input{tables}
+\bibliography{references}
+\bibliographystyle{iclr2027_conference}
+\end{document}

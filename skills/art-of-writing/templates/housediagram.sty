@@ -1,0 +1,294 @@
+% housediagram.sty -- TikZ styles for framework and concept diagrams in the house look
+% (references/figures_tables.md section 5). Use it in a standalone diagram source:
+%
+%   % target-width-in: 6.10
+%   \documentclass[tikz,border=1pt]{standalone}
+%   \usepackage{housediagram}          % [serif] sets the labels in Times instead of the house sans
+%   \begin{document}
+%   \begin{tikzpicture}
+%     \node[input square] (D) {$\mathcal{D}$};
+%     \node[trainable, right=24pt of D] (S) {\hdtitle{Scorer}\\ $w_i = g_\phi(x_i)$};
+%     \draw[data flow] (D) -- (S);
+%   \end{tikzpicture}
+%   \end{document}
+%
+% Build with scripts/render_diagram.py (vector PDF at printed size + PNG preview). Every size below is in
+% printed points: draw the figure at the width it is printed at and include it with no scaling.
+% Give each node exactly ONE box style (chip, chip selected, trainable, hero, ...): every box style carries
+% its own shadow, so two box styles on one node stack two shadows. `no shadow` must come first in the
+% option list (\node[no shadow, chip]), or go on a scope to flatten everything inside it.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{housediagram}[2026/11/13 v1.1 house diagram styles]
+
+\newif\ifhd@serif
+\DeclareOption{serif}{\hd@seriftrue}
+\DeclareOption{sans}{\hd@seriffalse}
+\ProcessOptions\relax
+
+% ---------------------------------------------------------------------------------------------- fonts
+% House face: bold grotesque sans (TeX Gyre Heros = Helvetica) for labels, Latin Modern (= Computer
+% Modern) for math, as in the [current] source figures. [serif]: Times text and math.
+\RequirePackage[T1]{fontenc}
+\ifhd@serif
+  \IfFileExists{newtxtext.sty}{%
+    \RequirePackage[nofontspec]{newtxtext}%
+    \RequirePackage{newtxmath}%
+    \let\Bbbk\relax
+  }{%
+    \RequirePackage{mathptmx}%
+    \RequirePackage{tgtermes}%
+  }%
+  \RequirePackage{amssymb}
+\else
+  \RequirePackage{lmodern}
+  \RequirePackage{amssymb}
+  \RequirePackage{tgheros}
+  \renewcommand{\familydefault}{\sfdefault}
+\fi
+\RequirePackage{amsmath}
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc,decorations.pathreplacing,shapes.geometric,shapes.callouts,patterns}
+
+% Type scale: three tiers (headline / title / label). Math prints 1.08 x the text it sits in.
+\newcommand\hdheadlinefont{\fontsize{9}{10.8}\selectfont\bfseries}
+\newcommand\hdtitlefont{\fontsize{7.5}{9}\selectfont\bfseries}
+\newcommand\hdlabelfont{\fontsize{7}{8.4}\selectfont\bfseries}
+\newcommand\hdbodyfont{\fontsize{7}{8.4}\selectfont}
+\newcommand\hdnotefont{\fontsize{7}{8.4}\selectfont\itshape}
+\newcommand\hdsmallfont{\fontsize{6.3}{7.5}\selectfont}
+\newcommand\hdtagfont{\fontsize{5.6}{6}\selectfont\bfseries}
+\DeclareMathSizes{5.6}{6}{4.6}{4}
+\DeclareMathSizes{6.3}{6.8}{5.2}{4.3}
+\DeclareMathSizes{7}{7.6}{5.7}{4.6}
+\DeclareMathSizes{7.5}{8.1}{6}{4.8}
+\DeclareMathSizes{9}{9.7}{7}{5.4}
+\newcommand\hdnohyphen{\hyphenpenalty=10000\exhyphenpenalty=10000\relax}
+\newcommand\hdtitle[1]{{\hdtitlefont #1}}
+\newcommand\hdquote[1]{{\hdnotefont \textquotedblleft #1\textquotedblright}}
+
+% --------------------------------------------------------------------------------------------- colours
+% One colour, one role (figures_tables.md section 5.1).
+\definecolor{hdink}{HTML}{1F1F1F}        % all text
+\definecolor{hdgray}{HTML}{595959}       % data arrows, neutral outlines, heavy frames
+\definecolor{hdmuted}{HTML}{8C8C8C}      % receding text (skipped items)
+\definecolor{hddot}{HTML}{9A9A9A}        % square-dotted outline of skipped / dropped items
+\definecolor{hdlane}{HTML}{F6F6F6}       % lanes: edgeless, no shadow
+\definecolor{hdrose}{HTML}{DB687B}       % role A: trainable modules
+\definecolor{hdrosetint}{HTML}{FBE4E8}
+\definecolor{hdnavy}{HTML}{143973}       % role B: frozen / fixed modules (outlines, arrows)
+\definecolor{hdnavyhero}{HTML}{214685}   % navy as a large fill (the focal module): one step lighter
+\definecolor{hdnavytint}{HTML}{E3EAF5}   % selected / kept state
+\definecolor{hdamber}{HTML}{F5A83C}      % the one accent: score / loss / feedback arrows only
+\definecolor{hdteal}{HTML}{67AB9F}       % semantic: correct / kept-good
+\definecolor{hdtealtint}{HTML}{E1F1ED}
+\definecolor{hdcoral}{HTML}{EA6B66}      % semantic: incorrect / lost
+\definecolor{hdcoraltint}{HTML}{FDE6E5}
+\definecolor{hdinput}{HTML}{594E54}      % the dark input square
+\definecolor{hdghost}{HTML}{E2E2E2}      % ghosted (inactive) outlines; opaque, never transparency
+\definecolor{hdghosttext}{HTML}{C4C4C4}
+\definecolor{hdbar}{HTML}{CCCCCC}        % neutral score bars inside a schematic
+
+% ---------------------------------------------------------------------------------------------- layers
+% Cards and frames at the bottom, lanes above them (a lane may sit inside a card), object shadows above
+% the lanes, then the objects.
+\pgfdeclarelayer{hdframeshadows}
+\pgfdeclarelayer{hdcards}
+\pgfdeclarelayer{hdframes}
+\pgfdeclarelayer{hdshadows}
+\pgfdeclarelayer{hdfront}
+\pgfsetlayers{hdframeshadows,hdcards,hdframes,hdshadows,main,hdfront}
+
+% ---------------------------------------------------------------------------------------------- shadow
+% House drop shadow (section 5.2.3): Gaussian, sigma 1.0 pt, offset 1.1 pt right and 1.5 pt down, 25 %
+% black, drawn as eight concentric translucent rounded rectangles so the PDF stays pure vector.
+% #1 = layer, #2 = corner radius of the shape in pt.
+\newcommand\hd@shadow[2]{%
+  \pgfextra{%
+    \begin{pgfonlayer}{#1}%
+      \foreach \hd@d/\hd@o in {1.80/0.014,1.35/0.017,0.95/0.026,0.55/0.036,0.15/0.043,-0.25/0.047,-0.70/0.044,-1.20/0.033}{%
+        \pgfmathsetmacro\hd@r{max(0.3,#2+\hd@d)}%
+        \fill[black,fill opacity=\hd@o,rounded corners=\hd@r pt]
+          ([xshift=1.1pt-\hd@d pt,yshift=-1.5pt-\hd@d pt]\tikzlastnode.south west) rectangle
+          ([xshift=1.1pt+\hd@d pt,yshift=-1.5pt+\hd@d pt]\tikzlastnode.north east);
+      }%
+    \end{pgfonlayer}%
+  }%
+}
+
+\tikzset{
+  hd shadow/.style={append after command={\hd@shadow{hdshadows}{#1}}},
+  hd shadow/.default=2.6,
+  hd frame shadow/.style={append after command={\hd@shadow{hdframeshadows}{#1}}},
+  hd frame shadow/.default=5.8,
+  no shadow/.style={hd shadow/.style={}, hd frame shadow/.style={}},
+  % ------------------------------------------------------------------------------------ arrow tips
+  hdhead/.tip={Stealth[length=5.2pt,width=5.2pt,inset=1.25pt]},
+  hdhead small/.tip={Stealth[length=4.2pt,width=4.2pt,inset=1pt]},
+  % ------------------------------------------------------------------------------------ modules
+  hd base/.style={draw, line width=1.1pt, fill=white, rounded corners=2.6pt, text=hdink,
+    inner xsep=5pt, inner ysep=3.6pt, align=center, font=\hdbodyfont},
+  trainable/.style={hd base, draw=hdrose, hd shadow},
+  frozen/.style={hd base, draw=hdnavy, hd shadow},
+  neutral/.style={hd base, draw=hdgray, hd shadow},
+  state/.style={hd base, draw=hdnavy, fill=hdnavytint, hd shadow},
+  % The one focal module of a figure: solid fill in its role colour (hero=hdrose for a trainable one),
+  % white bold text and math, white sticker rim.
+  hero/.style={hd base, draw=white, line width=1.2pt, fill=#1, text=white, font=\hdbodyfont\boldmath, hd shadow},
+  hero/.default=hdnavyhero,
+  hero rose/.style={hero=hdrose},
+  % A module shared by two roles: gradient from one role colour to the other (one per figure).
+  hero gradient/.style={hd base, draw=white, line width=1.2pt, left color=hdrose, right color=hdnavyhero,
+    text=white, font=\hdbodyfont\boldmath, hd shadow},
+  ghost/.style={hd base, draw=hdghost, text=hdghosttext},
+  % ------------------------------------------------------------------------------------ inputs and items
+  input square/.style={draw=black, line width=1.1pt, fill=hdinput, text=white, sharp corners,
+    minimum size=18pt, inner sep=0pt, font=\fontsize{8.5}{9}\selectfont, hd shadow=0.3},
+  % Chips hold one line of example text; the fixed text height keeps every chip of a row equally tall.
+  % With a text width, a chip whose text is wider than text width minus the tag (10 pt) wraps at a space
+  % (never hyphenated): widen the text width or shorten the example, and check the PNG.
+  hd chip base/.style={draw=hdgray, line width=1.1pt, fill=white, rounded corners=2pt, text=hdink,
+    minimum height=15pt, text height=5.2pt, text depth=1.6pt, inner xsep=4pt, inner ysep=1.5pt,
+    align=left, font=\hdnotefont\hdnohyphen},
+  chip/.style={hd chip base, hd shadow=2},
+  chip selected/.style={hd chip base, draw=hdnavy, fill=hdnavytint, hd shadow=2},
+  chip dropped/.style={hd chip base, draw=hddot, text=hdmuted, line cap=butt,
+    dash pattern=on 1.1pt off 2.2pt, dash phase=0.55pt},
+  hd token base/.style={hd chip base, minimum width=15pt, inner sep=0pt, align=center, font=\hdlabelfont},
+  token/.style={hd token base, hd shadow=2},
+  token selected/.style={hd token base, draw=hdnavy, fill=hdnavytint, hd shadow=2},
+  % 16 dot periods around a 15 x 15 pt, r 2 pt token: a dot on every corner, no seam.
+  token dropped/.style={hd token base, draw=hddot, text=hdmuted, line cap=butt,
+    dash pattern=on 1.18pt off 2.35pt, dash phase=1.76pt},
+  % A numbered tag inside a chip: chip, tagged=1 (also indents wrapped lines of a chip with a text width).
+  tagged/.style={label={[num tag, anchor=west, xshift=3pt]west:#1},
+    execute at begin node={\ifx\tikz@text@width\pgfutil@empty\hspace*{10pt}\else\advance\leftskip by 10pt\relax\fi}},
+  num tag/.style={circle, draw=hdgray, line width=0.6pt, fill=white, minimum size=8pt, inner sep=0pt,
+    font=\hdtagfont, text=hdink},
+  % ------------------------------------------------------------------------------------ containers
+  % Draw them with the \hdlane / \hdcard / \hdframe / \hdperforated / \hdgroup macros (they fit the
+  % named nodes and go on the layer below the objects). Lanes wrap groups of items, never one module.
+  lane/.style={fill=hdlane, draw=none, rounded corners=3.4pt, inner xsep=6pt, inner ysep=4pt},
+  card/.style={fill=white, draw=none, rounded corners=6.6pt, inner sep=7pt, hd frame shadow=6.6},
+  % the faint hairline under the white dashes keeps the top and left edges visible on a white page
+  perforated card/.style={fill=white, draw=white, line width=1.8pt, line cap=butt, dash pattern=on 5pt off 5pt,
+    rounded corners=5.8pt, inner sep=7pt, preaction={draw=black!12, line width=0.8pt, solid}, hd frame shadow=5.8},
+  heavy frame/.style={fill=white, draw=hdgray, line width=1.45pt, rounded corners=5.8pt, inner sep=9.5pt,
+    hd frame shadow=5.8},
+  dashed group/.style={draw=#1, line width=1.1pt, dash pattern=on 3.3pt off 3.3pt, line cap=butt,
+    rounded corners=4.6pt, inner sep=3pt, fill=none},
+  dashed group/.default=hdgray,
+  % Speech bubble for a quoted example: \node[callout=hdnavy, callout absolute pointer={(x.south)}] {...};
+  % (the pointer leaves from the side facing its target). For a tail at a chosen x, use a callout box
+  % and \hdtail: \node[callout box=hdnavy] (c) {...}; \hdtail[hdnavy]{c}{target}.
+  callout/.style={rectangle callout, draw=#1, fill=white, line width=1.1pt, rounded corners=3.4pt,
+    callout pointer width=7pt, text=hdink, inner xsep=5pt, inner ysep=3.5pt, align=left, font=\hdbodyfont,
+    hd shadow=3.4},
+  callout/.default=hdgray,
+  callout box/.style={hd base, draw=#1, rounded corners=3.4pt, align=left, inner xsep=6pt, inner ysep=4pt,
+    hd shadow=3.4},
+  callout box/.default=hdgray,
+  % Schematic bars: score (neutral) and the part a penalty removes (coral hatch).
+  score bar/.style={fill=hdbar, draw=none},
+  penalty bar/.style={pattern=north east lines, pattern color=hdcoral, draw=hdcoral, line width=0.5pt},
+  % ------------------------------------------------------------------------------------ connectors
+  data flow/.style={draw=hdgray, line width=1.1pt, line cap=butt, -hdhead, rounded corners=4.2pt},
+  role flow/.style={data flow, draw=#1},
+  score flow/.style={draw=hdamber, line width=1.1pt, line cap=butt, dash pattern=on 3.3pt off 3.3pt,
+    -hdhead, rounded corners=4.2pt},
+  feedback flow/.style={draw=hdamber, line width=1.1pt, line cap=butt, -hdhead, rounded corners=4.2pt},
+  ghost flow/.style={data flow, draw=hdghost},
+  plain line/.style={draw=hdgray, line width=1.1pt, line cap=butt, rounded corners=4.2pt},
+  guide line/.style={draw=hddot, line width=0.8pt, line cap=butt, dash pattern=on 0.8pt off 1.6pt},
+  brace/.style={decorate, decoration={brace, amplitude=2.6pt, raise=1pt}, draw=hdgray, line width=0.8pt},
+  % ------------------------------------------------------------------------------------ small parts
+  operator/.style={circle, draw=hdgray, line width=1.1pt, fill=white, minimum size=15pt, inner sep=0pt,
+    font=\hdbodyfont},
+  badge/.style={draw=hdamber, line width=0.5pt, fill=white, rounded corners=2pt, minimum size=10pt,
+    inner sep=1pt, font=\hdsmallfont},
+  % A label that sits ON a line (white ground, so the line stops at its edges).
+  pill/.style={fill=white, draw=none, rounded corners=2pt, inner xsep=2pt, inner ysep=1.2pt,
+    font=\hdnotefont, text=hdink},
+  % ------------------------------------------------------------------------------------ text
+  headline/.style={font=\hdheadlinefont, text=hdink, inner sep=1pt},
+  header/.style={font=\hdtitlefont, text=hdink, inner sep=1pt},
+  note/.style={font=\hdnotefont, text=hdink, inner sep=1pt},
+  key label/.style={font=\hdlabelfont, text=hdink, inner sep=0pt, text height=5.6pt, text depth=2.1pt,
+    anchor=west},
+  % ------------------------------------------------------------------------------------ marks (pics)
+  % \pic at (node.north east) {bad};   coral disc with a white cross (lost / incorrect)
+  % \pic at (node.north east) {good};  teal disc with a white tick (kept / correct)
+  pics/bad/.style={code={
+    \fill[hdcoral, draw=white, line width=0.8pt] (0,0) circle (4.2pt);
+    \draw[white, line width=0.95pt, line cap=round] (-1.55pt,-1.55pt) -- (1.55pt,1.55pt)
+      (-1.55pt,1.55pt) -- (1.55pt,-1.55pt);
+  }},
+  pics/good/.style={code={
+    \fill[hdteal, draw=white, line width=0.8pt] (0,0) circle (4.2pt);
+    \draw[white, line width=0.95pt, line cap=round, line join=round] (-1.9pt,0.05pt) -- (-0.55pt,-1.35pt)
+      -- (1.95pt,1.45pt);
+  }},
+  % \pic at (node.north east) {frozen};  navy disc with a white snowflake (frozen / not trained)
+  pics/frozen/.style={code={
+    \fill[hdnavy, draw=white, line width=0.8pt] (0,0) circle (4.4pt);
+    \draw[white, line width=0.6pt, line cap=round] (0:2.7pt) -- (180:2.7pt) (60:2.7pt) -- (240:2.7pt)
+      (120:2.7pt) -- (300:2.7pt);
+  }},
+  % ------------------------------------------------------------------------------------ legend keys
+  % One row:  \matrix[legend row] at (x,y) { \pic{key box={trainable}{Trainable}}; &
+  %                                          \pic{key arrow={score flow}{Score}}; \\ };
+  % or chained:  \pic (k1) at (x,y) {key box={trainable}{Trainable}};
+  %              \pic (k2) at ([xshift=14pt]k1-label.east) {key arrow={score flow}{Score}};
+  % Icons are flat (no shadow); key pair is a two-state stack (front = first style, back = second).
+  legend row/.style={column sep=14pt, inner sep=0pt, nodes={no shadow}},
+  pics/key box/.style 2 args={code={
+    \tikzset{no shadow}
+    \node[#1, minimum width=11pt, minimum height=9pt, inner sep=0pt, anchor=west] (-icon) at (0,0) {};
+    \node[key label] (-label) at (17pt,0) {#2};
+  }},
+  pics/key arrow/.style 2 args={code={
+    \draw[#1] (0,0) -- (17pt,0);
+    \coordinate (-icon) at (0,0);
+    \node[key label] (-label) at (23pt,0) {#2};
+  }},
+  pics/key mark/.style 2 args={code={
+    \pic at (5.5pt,0) {#1};
+    \coordinate (-icon) at (0,0);
+    \node[key label] (-label) at (17pt,0) {#2};
+  }},
+  pics/key pair/.style n args={3}{code={
+    \tikzset{no shadow}
+    \node[#2, minimum width=9.5pt, minimum height=9.5pt, inner sep=0pt, anchor=west] (-icon2) at (3.2pt,1.6pt) {};
+    \node[#1, minimum width=9.5pt, minimum height=9.5pt, inner sep=0pt, anchor=west] (-icon) at (0pt,-1.2pt) {};
+    \node[key label] (-label) at (19pt,0) {#3};
+  }},
+}
+
+% ------------------------------------------------------------------------------------------ containers
+% \hdlane[options]{name}{(a)(b)...}   edgeless light lane fitted around the listed nodes / coordinates
+\newcommand\hdlane[3][]{\begin{pgfonlayer}{hdframes}\node[lane,fit={#3},#1] (#2) {};\end{pgfonlayer}}
+\newcommand\hdcard[3][]{\begin{pgfonlayer}{hdcards}\node[card,fit={#3},#1] (#2) {};\end{pgfonlayer}}
+\newcommand\hdperforated[3][]{\begin{pgfonlayer}{hdcards}\node[perforated card,fit={#3},#1] (#2) {};\end{pgfonlayer}}
+\newcommand\hdframe[3][]{\begin{pgfonlayer}{hdcards}\node[heavy frame,fit={#3},#1] (#2) {};\end{pgfonlayer}}
+% \hdgroup[options]{colour}{name}{(a)(b)...}   dashed outline around a group (no fill, no shadow)
+\newcommand\hdgroup[4][]{\begin{pgfonlayer}{hdfront}\node[dashed group=#2,fit={#4},#1] (#3) {};\end{pgfonlayer}}
+% \hdtail[colour]{callout node}{target}   speech-bubble tail rising from the top edge of the callout,
+% vertically under the target node (keep the target within the callout's width).
+\newcommand\hdtail[3][hdgray]{%
+  \coordinate (hd@tb) at (#3 |- #2.north);
+  \fill[white] ([xshift=-3.8pt]hd@tb) -- ([yshift=6pt]hd@tb) -- ([xshift=3.8pt]hd@tb) -- cycle;
+  \draw[white, line width=1.5pt, line cap=butt] ([xshift=-3.8pt]hd@tb) -- ([xshift=3.8pt]hd@tb);
+  \draw[#1, line width=1.1pt, line join=round, line cap=round]
+    ([xshift=-3.8pt]hd@tb) -- ([yshift=6pt]hd@tb) -- ([xshift=3.8pt]hd@tb);
+}
+% \hdstack[n]{name}{style}{(position)}{text}   n >= 2 stacked cards (sets, multiplicity, two states):
+% n - 1 empty back cards up and to the right, each with its own shadow, then the named front card.
+\newcommand\hdstack[5][3]{%
+  \coordinate (hd@stackat) at #4;
+  \foreach \hd@k in {#1,...,2}{%
+    \node[#3] at ([xshift=(\hd@k-1)*1.8pt, yshift=(\hd@k-1)*1.8pt]hd@stackat) {\phantom{#5}};
+  }%
+  \node[#3] (#2) at (hd@stackat) {#5};
+}
+
+\endinput

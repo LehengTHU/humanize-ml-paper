@@ -1,0 +1,67 @@
+% target-width-in: 3.25
+% cluster_quota -- method figure at \columnwidth, on invented content: how the diversity scorer h_psi of
+% framework_pipeline works. The encoder groups the candidates; group c gets the quota
+% q_c = n_c^{-alpha} / sum_k n_k^{1-alpha} (alpha = 0.5: 0.8x, 1.0x, 1.2x, 1.7x of uniform for n = 5, 3, 2, 1),
+% so the lone item of the rare group C_4 is sampled with p proportional to .8 x 1.7.
+% Roles: rose = trainable, navy tint = quota, the boosted rare group is the one filled object.
+\documentclass[tikz,border=1pt]{standalone}
+\usepackage{housediagram}
+
+% \grouprow{row}{n}{comma-separated item scores}{quota}{quota label}
+\newcommand\grouprow[5]{%
+  \coordinate (y#1) at (0, {-(#1-1)*21.5pt});
+  \node[note, anchor=west] (la#1) at (y#1) {$C_{#1}$};
+  \ifnum#1=4 \def\hdtok{token selected}\else\def\hdtok{token}\fi
+  \foreach \w [count=\j] in {#3}{%
+    \node[\hdtok, minimum width=14pt, minimum height=14pt] (a#1\j) at ([xshift={20pt + (\j-1)*16.5pt}]y#1) {\w};
+  }
+  \hdlane[inner ysep=2.5pt, inner xsep=4pt]{ra#1}{(la#1)([xshift=93pt, yshift=7pt]y#1)([yshift=-7pt]y#1)}
+  \node[note, anchor=west] (lb#1) at ([xshift=125pt]y#1) {$n{=}#2$};
+  \ifnum#1=4
+    \fill[hdnavyhero] ([xshift=144pt, yshift=-3.5pt]y#1) rectangle ++({#4*26pt}, 7pt);
+  \else
+    \filldraw[fill=hdnavytint, draw=hdnavy, line width=0.8pt] ([xshift=144pt, yshift=-3.5pt]y#1) rectangle ++({#4*26pt}, 7pt);
+  \fi
+  \node[note, anchor=west] (qv#1) at ([xshift=190pt]y#1) {#5};
+  \hdlane[inner ysep=2.5pt, inner xsep=4pt]{rb#1}{(lb#1)([xshift=205pt, yshift=7pt]y#1)([xshift=125pt, yshift=-7pt]y#1)}
+}
+
+\begin{document}
+\begin{tikzpicture}
+  % ------------------------------------------------------------------ groups (left) and quotas (right)
+  \begin{scope}[no shadow]
+    \grouprow{1}{5}{.9,.4,.7,.2,.6}{0.77}{0.8$\times$}
+    \grouprow{2}{3}{.8,.3,.5}{0.995}{1.0$\times$}
+    \grouprow{3}{2}{.6,.9}{1.22}{1.2$\times$}
+    \grouprow{4}{1}{.8}{1.72}{1.7$\times$}
+  \end{scope}
+  \draw[guide line, line width=0.9pt] ([xshift={144pt+26pt}, yshift=8pt]y1) -- ([xshift={144pt+26pt}, yshift=-8pt]y4);
+  \node[note, text=hdmuted, anchor=south] at ([xshift={144pt+26pt}, yshift=8pt]y1) {uniform};
+  \node[header, anchor=south west] (ha) at ([yshift=10pt]ra1.north west) {Item scores $w_{c,j}$\vphantom{$n_c^{-\alpha}$}};
+  \node[header, anchor=south west] (hb) at ([yshift=10pt]rb1.north west) {Group quota $q_c \propto n_c^{-\alpha}$};
+  \hdperforated{cardA}{(ha)(ra1)(ra4)}
+  \hdperforated{cardB}{(hb)(rb1)(rb4)}
+  \coordinate (mid) at ($(y2)!0.5!(y3)$);
+  \draw[data flow] (cardA.east |- mid) -- node[note, above=0.5pt] {$n_c$} (cardB.west |- mid);
+
+  % ------------------------------------------------------------------ encoder strip
+  \node[input square, anchor=south west] (D) at ([xshift=1pt, yshift=19pt]cardA.north west) {$\mathcal{D}$};
+  \node[trainable, minimum width=44pt, minimum height=25pt, right=20pt of D] (E)
+    {\hdtitle{Encoder}\\[0.6pt] $h_\psi$};
+  \draw[data flow] (D) -- (E);
+  \draw[data flow] (E) -- node[note, right=1pt] {cluster} (cardA.north -| E);
+  \matrix[legend row, column sep=10pt, anchor=east] at ([yshift=1pt]cardB.east |- E) {
+    \pic {key box={trainable}{Trainable}}; &
+    \pic {key box={fill=hdnavyhero, draw=none}{Boosted quota}}; \\
+  };
+
+  % ------------------------------------------------------------------ sampling rule
+  \node[note, anchor=west, font=\hdbodyfont] (rule) at ([xshift=8pt, yshift=-24pt]cardA.south west)
+    {$p_t(x_{c,j}) \propto w_{c,j}\, q_c$};
+  \pic at ([xshift=-14pt]cardB.east |- rule) {good};
+  \node[note, anchor=east] (ex) at ([xshift=-21pt]cardB.east |- rule) {$C_4$: $.8 \times 1.7$, sampled};
+  \hdlane[inner xsep=0pt]{rulelane}{(cardA.west |- rule)(rule)(cardB.east |- rule)}
+  \draw[data flow] (cardA.south) -- node[note, right=0.5pt] {$w_{c,j}$} (cardA.south |- rulelane.north);
+  \draw[data flow] (cardB.south) -- node[note, right=0.5pt] {$q_c$} (cardB.south |- rulelane.north);
+\end{tikzpicture}
+\end{document}

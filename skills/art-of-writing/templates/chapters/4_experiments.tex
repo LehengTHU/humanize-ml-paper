@@ -1,0 +1,117 @@
+% Experiments: 2.8-3.0 pp at ICLR (850-1,000 words), 1-2 tables + 2-3 figures;
+% paragraphs of median 3-4 sentences. The section opens with the RQ list, not a
+% roadmap. Opener + RQ bullets -> setup run-ins -> one "(RQk) Title" subsection
+% per RQ. No data yet: keep every table fully structured with \pend cells and
+% write each finding as a falsifiable expectation inside \draft{} (experiments.md).
+\section{Experiments} \label{sec:experiments}
+% Opener with an appendix pointer [some]; a bare RQ list without an opener is
+% also seen [some].
+We evaluate X through the following research questions (further analyses, \eg <x>, <y> and <z>, are in Appendix~\ref{apdx:experiments}):
+\begin{itemize}[leftmargin=*]
+    \item \textbf{RQ1:} (Performance) Can X achieve better <metric> compared to <baseline> while <keeping cost or property>?
+    \item \textbf{RQ2:} (Mechanism) How do <core concept A> and <core concept B> affect the <behavior>?
+    \item \textbf{RQ3:} (Ablation Study) How does the hyperparameter $\alpha$ affect X? How does each component contribute to the final performance?
+\end{itemize}
+
+% Setup run-ins sit under \subsection{Experiment Setup} [some] or directly
+% under the section [some]. Heads: \textbf{Models.} [most], then the data
+% paragraph(s): \textbf{Training and evaluation.} [some], \textbf{Evaluation
+% Benchmarks.} [some], or one head per benchmark family for an inference-time
+% method [some] (e.g. \textbf{In-domain benchmarks.}, \textbf{Transfer benchmarks.}).
+\subsection{Experiment Setup} \label{sec:exp-setup}
+We summarize the setup here, and Appendix~\ref{apdx:impl-details} gives the full details.
+
+\textbf{Models.} We run all experiments on two backbones of different sizes, <Model-S> and <Model-L> \citep{Placeholder-A}.
+
+\textbf{Training and evaluation.} We train on <dataset> \citep{Placeholder-B}, which holds <size and content>.
+For <aspect 1>, we test on <A> \citep{Placeholder-B} and <B> \citep{Placeholder-C}. For <aspect 2>, we test on <C> \citep{Placeholder-C}.
+<A> matches the training distribution, and the other test sets are out of distribution.
+We report the mean over <n> runs with different random seeds.
+
+% \textbf{Baselines.} only when there are >= 2 baseline families [some],
+% grouped by the Related Works taxonomy, plus an ablation baseline. With a
+% single natural baseline, delete this paragraph and name the baseline inside
+% RQ1 together with the shared starting checkpoint [some; see RQ1 below].
+\textbf{Baselines.} We compare against <n $\geq$ 3> <kind> methods from <$\geq$ 2> families: <family 1> methods <Baseline-A> \citep{Placeholder-A} and <Baseline-B> \citep{Placeholder-B}, and the <family 2> method <Baseline-C> \citep{Placeholder-C}. We also include <X w/o C1> as an ablation baseline. Appendix~\ref{apdx:impl-details} describes each baseline.
+
+% Main table: T1 form [some; current]: scale-grouped, no Avg column, one
+% metric, our row shaded per cell, no "(Ours)". For many baselines per backbone
+% use T2 (Avg column, "+ X (Ours)"); for a quality + cost claim use T4.
+\begin{table*}[t]
+\centering
+\renewcommand{\arraystretch}{0.9}
+\caption{Results on <task> benchmarks at two model scales. The best result in each column is \textbf{bold}.}
+\makebox[\linewidth][c]{%
+  \shrinktofit{0.92\linewidth}{%
+    \begin{tabular}{cl|cccc}
+    \toprule
+    \multicolumn{2}{c|}{\textbf{}} & \multicolumn{4}{c}{\textbf{Benchmarks}} \\
+    \textbf{Scale} & \textbf{Method} & \textbf{Bench-1} & \textbf{Bench-2} & \textbf{Bench-3} & \textbf{Bench-4} \\
+    \midrule
+    \multirow{4}{*}{Model-S}
+    & Base       & \pend & \pend & \pend & \pend \\
+    \cmidrule(lr){2-6}
+    & + Baseline-A & \pend & \pend & \pend & \pend \\
+    & + Baseline-B & \pend & \pend & \pend & \pend \\
+    & \cellcolor{oursrow}+ X & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend \\
+    \midrule\midrule
+    \multirow{4}{*}{Model-L}
+    & Base       & \pend & \pend & \pend & \pend \\
+    \cmidrule(lr){2-6}
+    & + Baseline-A & \pend & \pend & \pend & \pend \\
+    & + Baseline-B & \pend & \pend & \pend & \pend \\
+    & \cellcolor{oursrow}+ X & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend \\
+    \bottomrule
+    \end{tabular}}}
+\label{tab:main-table}
+\vspace{-16pt}
+\end{table*}
+
+\subsection{(RQ1) Performance Comparison} \label{sec:main-performance}
+Table~\ref{tab:main-table} reports the results of X and the baselines, and Appendix~\ref{apdx:experiments} adds results under <other setting>.
+% Single-baseline variant [some]: "Table~\ref{tab:main-table} compares X with <baseline> trained on <signal> alone; both runs start from one shared <SFT> checkpoint."
+We have the following observations:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{\draft{[Expected]} X generally outperforms <baseline> on every benchmark family.}
+    As shown in Table~\ref{tab:main-table}, <evidence>. Moreover, <strengthening>.
+    We attribute this gain to <mechanism>.
+    In contrast, <baselines> are weaker and less stable, probably because <reason>.
+    \item \textbf{\draft{[Expected]} X is more <efficient> than <baseline>.}
+    <Evidence with a bounded number, \eg ``up to''>.
+\end{itemize}
+
+\subsection{(RQ2) Mechanism of <Components>} \label{sec:mechanism}
+In this section, we examine how <components> shape <behavior>.
+
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \figplaceholder[2.6cm]{Plot: <metric> dynamics (one PNG per panel)}
+        \vspace{-6pt}
+        \caption{<Model-S>.}
+        \label{fig:mechanism-a}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \figplaceholder[2.6cm]{Plot: <metric> dynamics (one PNG per panel)}
+        \vspace{-6pt}
+        \caption{<Model-L>.}
+        \label{fig:mechanism-b}
+    \end{subfigure}
+    \vspace{-8pt}
+    \caption{<Title phrase>. <Takeaway sentence>.}
+    \label{fig:mechanism}
+    \vspace{-12pt}
+\end{figure}
+
+\textbf{<Core concept A>.} To test whether <core concept A> lowers <risk>, we monitor <quantity>.
+As shown in Figure~\ref{fig:mechanism}, <observation>. This phenomenon is because <mechanism>. Consequently, <consequence>.
+
+\textbf{<Core concept B>.} We build <stress setting> to isolate <core concept B>. <Observation>. More results are in Appendix~\ref{apdx:experiments}.
+
+\subsection{(RQ3) Ablation Study} \label{sec:ablation}
+We remove <component> and evaluate the resulting variant on <Model-L> (\ie X (w/o <component>)).
+\textbf{\draft{[Expected]} Both components contribute to the final performance.} <Evidence>.
+We therefore set $\alpha$ to <value> by default, because <reason>. Appendix~\ref{apdx:experiments} reports further results.

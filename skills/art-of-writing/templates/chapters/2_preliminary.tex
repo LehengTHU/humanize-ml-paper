@@ -1,0 +1,29 @@
+% Preliminary: 0.6-0.9 pp (350-550 words), 2 subsections, 2-4 numbered eqs,
+% paragraphs of 1-3 sentences between displays. Opens with a roadmap naming
+% the subsections [most]; closes with the limitation the method removes [all].
+% Base-paradigm displays by paper type (references/paper_types.md):
+%   reward design (R):       r = \mathbb{I}(\texttt{match}(\hat{\mathcal{Y}},\mathcal{Y}))
+%   operator / closed form (T): \mathbf{a} = \mathbf{W}\mathbf{z}
+%   loss design (L):          the base loss \Lapl_{\text{NLL}} written out in full
+\section{Preliminary} \label{sec:preliminary}
+This section reviews the background our method builds on: <task formulation> in Section~\ref{sec:task-formulation} and <base paradigm> in Section~\ref{sec:base-paradigm}.
+
+\subsection{Task Formulation} \label{sec:task-formulation}
+Given an input $\mathcal{X}$ (\eg <concrete input>), the goal is to produce an output $\hat{\mathcal{Y}}$ that matches the ground truth $\mathcal{Y}$.
+Formally, <object> is defined as:
+\begin{equation} \label{eq:task}
+    \hat{\mathcal{Y}} = f_\theta(\mathcal{X}),
+\end{equation}
+where $f_\theta$ denotes the model parameterized by $\theta$.
+
+\subsection{<Base Paradigm>} \label{sec:base-paradigm}
+<Prior work> \citep{Placeholder-A} <does what> by optimizing:
+\begin{equation} \label{eq:base-objective}
+    \mathcal{J}(\theta) = \mathbb{E}_{(\mathcal{X}, \mathcal{Y}) \sim \mathcal{D}} \big[ s(\hat{\mathcal{Y}}, \mathcal{Y}) \big],
+\end{equation}
+where $\mathcal{D}$ denotes the training set and $s(\cdot,\cdot)$ is <scoring function>.
+This <so-what sentence: what the objective rewards or does>.
+% Optional 2.x Literature Review [some] (~0.4-0.5 pp): group prior methods by
+% WHICH TERM of the base equation they modify, as bold-headed bullets, then a
+% critique paragraph ("Yet most of these designs rest on heuristics ...").
+Nevertheless, <limitation 1> and <limitation 2> keep the vanilla approach from reaching the <twin concepts> that <task> needs.

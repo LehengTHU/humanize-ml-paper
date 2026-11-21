@@ -1,0 +1,113 @@
+% Methodology: 2.4-2.8 pp (900-1,100 words) at ICLR; paragraphs of median 2-3
+% sentences between displays. Roadmap opener [all] (method papers); each
+% subsection opens with a purpose clause; the last subsection assembles the
+% method. ALL math needed to re-implement the method stays here [all].
+% This scaffold is type-neutral. Subsection plans per paper type (W workflow
+% with components; T objective + constraint + closed form; L loss + theorem;
+% R reward design with roles) are in references/paper_types.md.
+\section{Methodology} \label{sec:methodology}
+\begin{figure*}[t]
+    \centering
+    \figplaceholder[3.6cm]{Framework figure (figure*, 0.88--1.0 textwidth), from templates/diagram\_skeleton.tex: white rounded boxes, one filled focal module, LaTeX math labels, compact legend, concrete example}
+    \vspace{-8pt}
+    \caption{Overview of X. Given <input> $\mathcal{X}$, <step 1>. After that, <step 2>. Finally, <step 3>.}
+    \label{fig:main-figure}
+    \vspace{-12pt}
+\end{figure*}
+In this section, we describe \textbf{X} (\textbf{X}xx \textbf{Y}yy), a <epithet> <kind of method> for <goal>.
+Section~\ref{sec:method-a} first introduces <the general formulation / component A>.
+After that, Section~\ref{sec:method-b} explains how X achieves <objective B>.
+Finally, Section~\ref{sec:method-overall} combines these pieces into the complete X.
+
+% Echo the core concepts (same phrase, unmarked) in subsection titles or run-ins (concepts.md).
+\subsection{<Core Concept A> with <Technique>} \label{sec:method-a}
+To overcome <limitation 1>, we <precise verb> <component A>, following the success of <idea> \citep{Placeholder-C}.
+Specifically, <mechanism>, which we formulate as:
+\begin{equation} \label{eq:component-a}
+    \hat{\mathcal{Y}} = g_{\phi}\big(f_\theta(\mathcal{X})\big),
+\end{equation}
+where $g_{\phi}$ denotes <component A> parameterized by $\phi$.
+This design enables <benefit>.
+
+% OPTIONAL formal results (theory papers only [some]). Numbering: Definition /
+% Lemma with plain counters, "Definition 1", "Lemma 1" [current]; a headline
+% theorem restatable and numbered within the section, "Theorem 3.1" [some].
+% Borrowed results carry the citation in the optional title [some].
+% (ICLR: refer to a display as \Eqref{eq:component-a}; NeurIPS/ICML: "Equation~\ref{eq:component-a}".)
+We measure <property> with the following quantity:
+\begin{definition}[<Named Quantity> \citep{Placeholder-B}] \label{def:concept}
+For <objects> $P$ and $Q$ on <space>, the <named quantity> is $D(P \,\|\, Q) \triangleq$ <formula>.
+\end{definition}
+Solving <problem> directly needs <expensive procedure>, so we rewrite it with the following lemma:
+\begin{lemma}[<Descriptive Title> \citep{Placeholder-B}] \label{lemma:simplify}
+Let <assumption>. Then <statement>.
+\end{lemma}
+With this identity, <problem> reduces to <simpler problem>, solved in <cost> (see Appendix~\ref{apdx:proof-lemma} for the proof).
+Lemma~\ref{lemma:simplify} then leads to our main result:
+\begin{restatable}{thm}{MainTheorem} \label{thm:main}
+Let $\Omega_h \triangleq$ <definition> for <parameter> $h > 0$.
+Then $\mathcal{J}(\theta)$ \textbf{upper-bounds} <target quantity> up to an additive <term in $h$>.
+\end{restatable}
+We sketch the argument below and give the complete proof in Appendix~\ref{apdx:proof-main-theorem}.
+\begin{proof}
+Applying <inequality> to <term> bounds <target quantity> by <expression>. Taking the expectation over <data> gives the claim.
+\end{proof}
+Theorem~\ref{thm:main} implies that <consequence>. In practice, <knob> is set by <setting> (see Algorithm~\ref{alg:method}).
+
+\subsection{<Core Concept B> via <Technique>} \label{sec:method-b}
+With <core concept A> handled by <component A>, we next address <core concept B>.
+% One bold run-in paragraph per term, then a "Total ..." closer [some].
+% Reward terms are written r^{\text{name}} [some]; losses \Lapl_{\text{Name}} [some].
+\textbf{<Term 1>.} <One-sentence purpose>, computed as:
+\begin{equation} \label{eq:term-1}
+    \ell^{\text{term1}} = \text{<expression>},
+\end{equation}
+where <symbol> denotes <meaning>. This term rewards <behavior>.
+
+\textbf{<Term 2>.} In addition, to <purpose>, we add:
+\begin{equation} \label{eq:term-2}
+    \ell^{\text{term2}} = \text{<expression>},
+\end{equation}
+where <symbol> denotes <meaning>.
+
+\textbf{Total objective.} Finally, we combine the two terms:
+\begin{equation} \label{eq:total}
+    \ell = \ell^{\text{term1}} + \alpha \, \ell^{\text{term2}},
+\end{equation}
+where $\alpha$ is a scalar hyperparameter that trades off <trade-off>. The combined objective secures <both properties>.
+
+\subsection{<Method Name / Optimization with X>} \label{sec:method-overall}
+Putting the pieces together, X computes the final <output> as:
+\begin{equation} \label{eq:final}
+    \hat{\mathcal{Y}} = g_{\phi^{\star}}\big(f_{\theta^{\star}}(\mathcal{X})\big).
+\end{equation}
+Built on <principle> and driven by <signal>, X <achieves A> while <preserving B>.
+Algorithm~\ref{alg:method} summarizes the full procedure.
+Further implementation details are in Appendix~\ref{apdx:impl-details}.
+
+% Algorithm: main text, single column, [t] for an iterative training loop
+% [some]; appendix for a one-shot/closed-form procedure [some].
+% RL form of the steps ("sample outputs" / "score them" / "update the
+% policy"): references/paper_types.md.
+\begin{algorithm}[t]
+\captionsetup{labelformat=default,labelsep=colon,name=Algorithm}
+   \caption{Training with X}
+   \label{alg:method}
+\begin{algorithmic}
+   \STATE {\bfseries Input:} Dataset $\mathcal{D}$, batch size $B$, and maximum training steps $T$.
+   \STATE {\bfseries Initialization:} model $f_\theta$, <component> $g_\phi$, training step $t \leftarrow 0$.
+   \WHILE{$t \leq T$}
+     \STATE \tikzmk{phaseAa}\CommentBelow{sample a batch and run the model}
+     \STATE $\{(\mathcal{X}_n, \mathcal{Y}_n)\}_{n=1}^{B} \sim \mathcal{D}$, \ $\hat{\mathcal{Y}}_n = g_\phi(f_\theta(\mathcal{X}_n))$\tikzmk{phaseAb}
+     \STATE \tikzmk{phaseBa}\CommentBelow{compute the objective}
+     \STATE $\ell = \ell^{\text{term1}} + \alpha\, \ell^{\text{term2}}$\tikzmk{phaseBb}
+     \STATE \tikzmk{phaseCa}\CommentBelow{update parameters}
+     \STATE Update $\theta, \phi$ with $\nabla \ell$\tikzmk{phaseCb}
+     \STATE $t \leftarrow t + 1$
+   \ENDWHILE
+   \STATE {\bfseries return} $f_\theta, g_\phi$.
+\end{algorithmic}
+\boxit[Forward]{PhaseABg}{phaseAa}{phaseAb}
+\boxit[Objective]{PhaseBBg}{phaseBa}{phaseBb}
+\boxit[Updating]{PhaseCBg}{phaseCa}{phaseCb}
+\end{algorithm}

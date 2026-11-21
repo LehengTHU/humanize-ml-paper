@@ -1,0 +1,88 @@
+% target-width-in: 6.75
+% teaser_problem_solution -- intro teaser, figure* at \textwidth, on invented content.
+% Problem vs solution on one canvas: the same five-prompt pool and budget k = 3 on both sides; top-k keeps
+% three copies of one easy question, X's diversity penalty removes the copies and keeps rare skills.
+% Roles: neutral = existing method, navy = ours (the focal module, filled), coral / teal = lost / kept-good.
+\documentclass[tikz,border=1pt]{standalone}
+\usepackage{housediagram}
+
+% \poolrow{side}{row}{token style}{quote}{quote colour}{score}{score left after the penalty}
+\newcommand\poolrow[7]{%
+  \node[#3] (#1t#2) at ([yshift={-(#2-1)*18.5pt}]#1o) {$x_{#2}$};
+  \node[note, text=#5, anchor=west, text width=55pt, align=left] (#1q#2) at ([xshift=3pt]#1t#2.east) {\hdquote{#4}};
+  \fill[score bar] ([xshift=3pt, yshift=-2.6pt]#1q#2.east) rectangle ++({#7*32pt}, 5.2pt);
+  \ifdim #7pt<#6pt
+    \path[penalty bar] ([xshift={3pt+#7*32pt}, yshift=-2.6pt]#1q#2.east) rectangle ++({(#6-#7)*32pt}, 5.2pt);
+  \fi
+}
+
+\begin{document}
+\begin{tikzpicture}
+  \coordinate (Lo) at (0,0);
+  \coordinate (Ro) at (248pt,0);
+
+  % ================================================================== left: existing top-k
+  \poolrow{L}{1}{token}{2 + 3 = ?}{hdink}{.92}{.92}
+  \poolrow{L}{2}{token}{Add 2 and 3}{hdink}{.90}{.90}
+  \poolrow{L}{3}{token}{Sum 2 \& 3}{hdink}{.88}{.88}
+  \poolrow{L}{4}{token dropped}{Sort [3, 1, 2]}{hdmuted}{.74}{.74}
+  \poolrow{L}{5}{token dropped}{Prove~${\smash{\sqrt{2}}\notin\mathbb{Q}}$}{hdmuted}{.70}{.70}
+  \hdlane{Lpool}{(Lt1)(Lt5)([xshift=35pt]Lq1.east)}
+  \node[neutral, minimum width=65pt, minimum height=30pt, right=13pt of Lpool] (Lsel)
+    {\hdtitle{Top-$k$}\\[0.8pt] budget $k{=}3$};
+  \coordinate (Lkx) at ([xshift=19pt]Lsel.east);
+  \node[token] (Lk1) at (Lkx |- Lt3) {$x_1$};
+  \node[token] (Lk2) at (Lkx |- Lt4) {$x_2$};
+  \node[token] (Lk3) at (Lkx |- Lt5) {$x_3$};
+  \hdlane{Lkept}{(Lk1)(Lk3)}
+  \hdgroup{hdcoral}{Lring}{(Lk1)(Lk3)}
+  \draw[data flow] (Lpool.east |- Lsel) -- (Lsel);
+  \draw[data flow] (Lsel.east) -- (Lkept.west |- Lsel.east);
+  \node[callout box=hdcoral, anchor=north west, text width=220.5pt] (Lcall) at ([yshift=-10pt]Lpool.south west)
+    {\hspace*{11pt}\hdtitle{3 of 3 slots spent on one easy question}};
+  \pic at ([xshift=9pt]Lcall.west) {bad};
+  \hdtail[hdcoral]{Lcall}{Lkept}
+
+  % ================================================================== right: X (ours)
+  \poolrow{R}{1}{token selected}{2 + 3 = ?}{hdink}{.92}{.92}
+  \poolrow{R}{2}{token dropped}{Add 2 and 3}{hdmuted}{.90}{.28}
+  \poolrow{R}{3}{token dropped}{Sum 2 \& 3}{hdmuted}{.88}{.26}
+  \poolrow{R}{4}{token selected}{Sort [3, 1, 2]}{hdink}{.74}{.74}
+  \poolrow{R}{5}{token selected}{Prove~${\smash{\sqrt{2}}\notin\mathbb{Q}}$}{hdink}{.70}{.70}
+  \hdlane{Rpool}{(Rt1)(Rt5)([xshift=35pt]Rq1.east)}
+  \node[hero, minimum width=65pt, minimum height=30pt, right=13pt of Rpool] (Rsel)
+    {\hdtitle{Diverse Top-$k$}\\[0.8pt] $s(x) - \lambda\, r(x)$};
+  \coordinate (Rkx) at ([xshift=19pt]Rsel.east);
+  \node[token selected] (Rk1) at (Rkx |- Rt3) {$x_1$};
+  \node[token selected] (Rk2) at (Rkx |- Rt4) {$x_4$};
+  \node[token selected] (Rk3) at (Rkx |- Rt5) {$x_5$};
+  \hdlane{Rkept}{(Rk1)(Rk3)}
+  \draw[role flow=hdnavy] (Rpool.east |- Rsel) -- (Rsel);
+  \draw[role flow=hdnavy] (Rsel.east) -- (Rkept.west |- Rsel.east);
+  \node[callout box=hdnavy, anchor=north west, text width=220.5pt] (Rcall) at ([yshift=-10pt]Rpool.south west)
+    {\hspace*{11pt}\hdtitle{3 distinct skills at the same budget}};
+  \pic at ([xshift=9pt]Rcall.west) {good};
+  \hdtail[hdnavy]{Rcall}{Rkept}
+
+  % ================================================================== headlines, lane headers, divider
+  \coordinate (HL) at ([yshift=19pt]Lpool.north);
+  \node[headline, anchor=base west] at (Lpool.west |- HL) {Existing: \textcolor{hdcoral}{top-$k$ fills the budget with clones}};
+  \node[headline, anchor=base west] at (Rpool.west |- HL) {X (ours): \textcolor{hdnavy}{a diversity penalty keeps rare skills}};
+  \coordinate (HS) at ([yshift=5pt]Lpool.north);
+  \foreach \s in {L,R}{
+    \node[header, anchor=base] at (\s pool.north |- HS) {Pool, scored by $s(x)$};
+    \node[header, anchor=base] at (\s kept.north |- HS) {Kept};
+  }
+  \draw[guide line, line width=0.9pt, dash pattern=on 3.3pt off 3.3pt]
+    ($(Lcall.east |- HL)!0.5!(Rcall.west |- HL) + (0,8pt)$) -- ($(Lcall.south east)!0.5!(Rcall.south west)$);
+
+  % ================================================================== legend
+  \matrix[legend row, anchor=north] at ([yshift=-9pt]$(Lcall.south west)!0.5!(Rcall.south east)$) {
+    \pic {key box={token}{Kept by top-$k$}}; &
+    \pic {key box={token selected}{Kept by X (ours)}}; &
+    \pic {key box={token dropped}{Dropped}}; &
+    \pic {key box={score bar}{Score $s(x)$}}; &
+    \pic {key box={penalty bar}{Removed by the penalty $\lambda r$}}; \\
+  };
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,92 @@
+% target-width-in: 3.25
+% teaser_failure_modes -- problem teaser at \columnwidth, on invented content.
+% One frozen score ranks two copies of an easy question above a rare proof, so top-k keeps the copies
+% (near-duplicates) and loses the rare skill; the two evidence panels show both failure modes.
+% Roles: teal outline = useful item, gray = noise, navy = frozen (the focal module, filled), coral = failure.
+\documentclass[tikz,border=1pt]{standalone}
+\usepackage{housediagram}
+
+% \item{row}{outline colour}{quote}{score}
+\newcommand\poolitem[4]{%
+  \node[chip, draw=#2, tagged=#1, text width=62pt] (c#1) at (0, {-(#1-1)*18.5pt}) {\hdquote{#3}};
+  \fill[score bar] ([xshift=3pt, yshift=-2.6pt]c#1.east) rectangle ++({#4*15pt}, 5.2pt);
+}
+
+\begin{document}
+\begin{tikzpicture}
+  % ------------------------------------------------------------------ prior pipeline
+  \poolitem{1}{hdteal}{2 + 3 = ?}{.92}
+  \poolitem{2}{hdteal}{Add 2 and 3}{.90}
+  \poolitem{3}{hdgray}{Free deals!}{.35}
+  \poolitem{4}{hdteal}{Prove~${\smash{\sqrt{2}}\notin\mathbb{Q}}$}{.70}
+  \hdlane{pool}{(c1)(c4)([xshift=18pt]c1.east)}
+  \node[hero, minimum width=42pt, minimum height=30pt, right=10pt of pool] (sc) {\hdtitle{Scorer}\\[0.8pt] $s(x)$};
+  \pic at ([xshift=-1pt, yshift=-1pt]sc.north east) {frozen};
+  \draw[data flow] (pool.east |- sc) -- (sc);
+
+  \coordinate (yk) at ($(c1.south)!0.5!(c2.north)$);
+  \coordinate (yd) at ($(c3.south)!0.5!(c4.north)$);
+  \coordinate (ox) at ([xshift=38pt]sc.east);
+  \node[token selected] (k1) at (ox |- yk) {1};
+  \node[token selected, right=4.5pt of k1] (k2) {2};
+  \node[token dropped] (d3) at (ox |- yd) {3};
+  \node[token dropped, right=4.5pt of d3] (d4) {4};
+  \hdlane{kept}{(k1)(k2)}
+  \hdlane{drop}{(d3)(d4)}
+  \hdgroup{hdcoral}{ring}{(k1)(k2)}
+  \pic at ([xshift=-0.5pt, yshift=-0.5pt]d4.north east) {bad};
+  \draw[role flow=hdnavy] ([yshift=5pt]sc.east) -- ++(9pt,0) |- node[note, above=0.5pt, pos=0.78] {top-$k$} (kept.west);
+  \draw[data flow] ([yshift=-5pt]sc.east) -- ++(9pt,0) |- node[note, below=0.5pt, pos=0.78] {rest} (drop.west);
+  \node[note, text=hdcoral, anchor=south] at ([yshift=1pt]kept.north) {near-duplicates};
+  \node[note, text=hdcoral, anchor=north] at ([yshift=-1pt]drop.south) {rare skill lost};
+
+  \node[headline, anchor=base west] at ([yshift=9pt]pool.north west) {Prior pipeline: \textcolor{hdcoral}{one frozen score}};
+
+  % ------------------------------------------------------------------ evidence cards: flush with row 2, equal widths
+  \coordinate (r3) at ([yshift=-17pt]pool.south west);
+  \coordinate (cm) at ($(pool.west)!0.5!(kept.east)$);
+  \coordinate (r3b) at (cm |- r3);
+  % (a) share per skill
+  \begin{scope}[shift={([xshift=7pt]r3)}, no shadow]
+    \node[header, anchor=north west] (ta) at (0,0) {(a) Rare skills dropped};
+    \foreach \g/\lab/\pool/\kept [count=\i] in {0/Arith./.40/.67, 1/Code/.35/.33, 2/Proof/.25/0}{
+      \coordinate (g\i) at (29pt, {-20pt - \g*15pt});
+      \node[note, anchor=east] at ([xshift=-3pt]g\i) {\lab};
+      \fill[score bar] ([yshift=0.5pt]g\i) rectangle ++({\pool*64pt}, 4pt);
+      \ifdim \kept pt>0pt \fill[hdnavyhero] ([yshift=-0.5pt]g\i) rectangle ++({\kept*64pt}, -4pt); \fi
+    }
+    \draw[plain line, line width=0.8pt] (29pt,-12pt) -- (29pt,-56pt);
+    \pic at ([xshift=6pt, yshift=-2.5pt]g3) {bad};
+    \node[note, text=hdcoral, anchor=west] at ([xshift=11pt, yshift=-2.5pt]g3) {0 kept};
+    \node[note, anchor=west, text=hdmuted] at ([xshift={.40*64pt+2pt}, yshift=3.5pt]g1) {pool};
+    \node[note, anchor=west] at ([xshift={.67*64pt+2pt}, yshift=-3.5pt]g1) {kept};
+  \end{scope}
+  \coordinate (abr) at ([xshift=-11.5pt, yshift=-66pt]r3b);
+  \hdperforated{cardA}{(ta)(abr)}
+  % (b) distinct skills vs budget
+  \begin{scope}[shift={([xshift=11.5pt]r3b)}, no shadow]
+    \node[header, anchor=north west] (tb) at (0,0) {(b) Clones fill the budget};
+    \begin{scope}[shift={(4pt,-52pt)}, x=16pt, y=9.5pt]
+      \draw[plain line, line width=0.8pt, rounded corners=0pt] (0,3.3) -- (0,0) -- (4.3,0);
+      \foreach \k in {1,...,4} \draw[hdgray, line width=0.6pt] (\k-0.5,0) -- (\k-0.5,-0.3);
+      \node[note, anchor=north] at (2.15,-0.3) {budget $k$};
+      \node[note, anchor=south west, xshift=-1pt] at (0,3.3) {distinct skills};
+      \draw[guide line, line width=1pt, dash pattern=on 3.3pt off 2.2pt] (0.5,1) -- (2.5,3) -- (4,3);
+      \node[note, text=hdmuted, anchor=west] at (4.05,3) {ideal};
+      \draw[hdcoral, line width=1.1pt, line join=round] (0.5,1) -- (1.5,1) -- (2.5,1) -- (3.5,1.5);
+      \foreach \p in {(0.5,1),(1.5,1),(2.5,1),(3.5,1.5)} \fill[hdcoral] \p circle (1.5pt);
+      \node[note, text=hdcoral, anchor=west] at (3.6,1.45) {top-$k$};
+    \end{scope}
+  \end{scope}
+  \coordinate (bbr) at ([xshift=-7pt]kept.east |- abr);
+  \hdperforated{cardB}{(tb)(bbr)}
+
+  % ------------------------------------------------------------------ legend
+  \matrix[legend row, column sep=12pt, anchor=north] at ([yshift=-9pt]$(cardA.south west)!0.5!(cardB.south east)$) {
+    \pic {key box={chip, draw=hdteal}{Useful}}; &
+    \pic {key box={chip}{Noise}}; &
+    \pic {key box={dashed group=hdcoral}{Near-duplicate}}; &
+    \pic {key mark={bad}{Lost}}; \\
+  };
+\end{tikzpicture}
+\end{document}

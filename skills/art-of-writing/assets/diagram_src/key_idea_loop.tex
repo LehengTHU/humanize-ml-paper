@@ -1,0 +1,27 @@
+% target-width-in: 2.64
+% key_idea_loop -- key-idea figure in a wrapfigure{r}{0.48\textwidth} (NeurIPS), on invented content.
+% The loop in one glance: the model's own loss change trains the scorers that sample its next batch; a
+% copy of an easy question gets p = .04 and is skipped. Same method X as framework_pipeline, abstracted.
+% Roles: rose = trainable (the scorers are the focal module, filled), navy tint = sampled batch, amber = feedback.
+\documentclass[tikz,border=1pt]{standalone}
+\usepackage{housediagram}
+\begin{document}
+\begin{tikzpicture}
+  \node[input square] (D) {$\mathcal{D}$};
+  \node[hero=hdrose, minimum width=60pt, minimum height=29pt, right=24pt of D] (S)
+    {\hdtitle{Scorers}\\[0.8pt] $g_\phi,\ h_\psi$};
+  \node[state, minimum width=48pt, minimum height=29pt, right=32pt of S] (B)
+    {\hdtitle{Batch}\\[0.6pt] $\mathcal{B}_t$};
+  \node[trainable, minimum width=48pt, minimum height=29pt, below=15pt of B] (M)
+    {\hdtitle{Model}\\[0.6pt] $f_\theta$};
+  \node[chip dropped, anchor=south east] (skip) at ([yshift=12pt]B.north east)
+    {\hdquote{Add 2 and 3}\ \ \textcolor{hdcoral}{$p{=}.04$}};
+  \pic at ([xshift=-1pt, yshift=-1pt]skip.north east) {bad};
+
+  \draw[data flow] (D) -- node[note, above=0.5pt] {$x_i$} (S);
+  \draw[data flow] (S) -- node[note, above=0.5pt] {sample} (B);
+  \draw[data flow] (B) -- node[note, right=1pt] {train} (M);
+  \draw[guide line, line width=1.1pt, dash pattern=on 1.1pt off 2.2pt, -hdhead] (S.north) |- node[note, above=0.5pt, pos=0.75] {skip} (skip.west);
+  \draw[feedback flow] (M.west) -| node[note, below=1pt, pos=0.22] {update by $\Delta\ell$} (S.south);
+\end{tikzpicture}
+\end{document}

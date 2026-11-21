@@ -1,0 +1,146 @@
+\section{Experiments}
+% ICML budget: 900-1,000 prose words, ~2.9 pp: one table* + one column table +
+% several column figures, some of them paired panels [venue: ICML]. No
+% wrapfigure in two columns.
+We evaluate X through the following research questions:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{RQ1:} (Quality and Cost) Does X outperform <Prior> while costing less?
+    \item \textbf{RQ2:} (<Mechanism>) How do <core concept A> and <core concept B> change the behaviour of the model?
+    \item \textbf{RQ3:} (Ablation Study) How does the weight $\lambda_{\text{B}}$ shape the training dynamics of X?
+\end{itemize}
+
+\textbf{Models.} We run all experiments on two backbones of different sizes, <Model-S> and <Model-L> \cite{Placeholder-A}.
+
+\textbf{Evaluation Benchmarks.} We adopt the evaluation protocol of <Prior> \cite{Placeholder-B} without changes.
+Specifically, we evaluate on <benchmark list with abbreviations>.
+Appendix~\ref{apdx:impl-details} gives the training and evaluation details.
+
+% Main table: table*[t], caption ABOVE, defined right after the setup
+% paragraphs -> prints atop the next page. T4 layout: Scale | Method | Metric |
+% tasks; tinted quality/cost rows; bold best per scale block; \midrule\midrule
+% between scales. \shrinktofit instead of \resizebox{0.93\linewidth} (never
+% enlarges a narrow table); $\uparrow$ instead of a typed Unicode arrow
+% (missing in Times under XeTeX) [fix].
+\begin{table*}[t]
+\centering
+\renewcommand{\arraystretch}{0.9}
+\caption{Quality and cost on <task> tasks at two model scales.}
+\label{tab:main-table}
+\shrinktofit{0.93\linewidth}{%
+\begin{tabular}{cl|c|cccccc}
+\toprule
+\multicolumn{3}{c|}{} & \multicolumn{6}{c}{\textbf{Tasks}} \\
+\textbf{Scale} & \textbf{Method} & \textbf{Metric} & \textbf{T-1} & \textbf{T-2} & \textbf{T-3} & \textbf{T-4} & \textbf{T-5} & \textbf{T-6} \\
+\midrule
+\multirow{4}{*}{L}
+ & \multirow{2}{*}{<Prior>} & \cellcolor{qualityrowcolor}\textbf{Quality $\uparrow$} & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend \\
+ & & \cellcolor{costrowcolor}\textbf{Cost $\downarrow$} & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend \\
+\cmidrule(lr){2-9}
+ & \multirow{2}{*}{X} & \cellcolor{qualityrowcolor}\textbf{Quality $\uparrow$} & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend \\
+ & & \cellcolor{costrowcolor}\textbf{Cost $\downarrow$} & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend \\
+\midrule\midrule
+\multirow{4}{*}{S}
+ & \multirow{2}{*}{<Prior>} & \cellcolor{qualityrowcolor}\textbf{Quality $\uparrow$} & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend \\
+ & & \cellcolor{costrowcolor}\textbf{Cost $\downarrow$} & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend \\
+\cmidrule(lr){2-9}
+ & \multirow{2}{*}{X} & \cellcolor{qualityrowcolor}\textbf{Quality $\uparrow$} & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend \\
+ & & \cellcolor{costrowcolor}\textbf{Cost $\downarrow$} & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend \\
+\bottomrule
+\end{tabular}}
+\vspace{-12pt}
+\end{table*}
+
+\subsection{(RQ1) Quality and Cost Comparison} \label{sec:main-performance}
+Table~\ref{tab:main-table} lists average quality and cost, and Figure~\ref{fig:sweep} shows one task across <sweep>.
+Appendix~\ref{apdx:experiments} contains further results.
+We have the following observations:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{\draft{[Expected]} X generally outperforms <Prior> at both scales.}
+    As shown in Table~\ref{tab:main-table}, <evidence>. We attribute this gain to <mechanism>.
+    \item \textbf{\draft{[Expected]} X costs less than <Prior>.}
+    The Cost rows of Table~\ref{tab:main-table} show that <evidence>.
+\end{itemize}
+
+% Result plot: figure[t] at \columnwidth. Draw at 7.7 in wide in matplotlib
+% (ticks 16 pt) -> printed at 3.25 in, ticks ~6.7 pt.
+\begin{figure}[t]
+    \centering
+    \figplaceholder[3.2cm]{Result plot (figure[t], columnwidth = 3.25 in): dual axis, quality lines over cost bars}
+    \caption{Quality and cost of X across <sweep> on <task>.}
+    \label{fig:sweep}
+    \vspace{-12pt}
+\end{figure}
+
+\subsection{(RQ2) Study of <Mechanisms>} \label{sec:mechanism}
+In this section, we examine how <core concept A> and <core concept B> change the behaviour of the model.
+
+\textbf{<Core concept A>.} To test whether <core concept A> lowers <risk>, we monitor <quantity>.
+As shown in Figure~\ref{fig:dynamics}, <observation>.
+This phenomenon is because <mechanism>.
+
+\begin{figure}[t]
+    \centering
+    \figplaceholder[2.6cm]{Analysis plot (figure[t], columnwidth): quantity over steps, ours vs baseline}
+    \caption{<Quantity> over training on <task>.}
+    \label{fig:dynamics}
+    % No trim here: Table 2 stacks directly below in the same column, and -12pt
+    % left 0.03 in between the two captions (kit: >= 0.1 in after a caption).
+\end{figure}
+
+\textbf{<Core concept B>.} We build <stress setting> and list the results in Table~\ref{tab:stress}.
+More results are in Appendix~\ref{apdx:experiments}.
+
+% Small table: table[t] in ONE column, scaled to at most 0.93\columnwidth
+% [venue: ICML]. \shrinktofit keeps body-size text if it already fits.
+\begin{table}[t]
+\centering
+\renewcommand{\arraystretch}{0.9}
+\caption{Quality and cost under <stress setting>.}
+\label{tab:stress}
+\shrinktofit{\columnwidth}{%
+\begin{tabular}{lc|cccc}
+\toprule
+\multicolumn{2}{c|}{} & \multicolumn{4}{c}{<Sweep>} \\
+Method & Metric & $1\times$ & $2\times$ & $4\times$ & $8\times$ \\
+\midrule
+\multirow{2}{*}{<Prior>} & \cellcolor{qualityrowcolor}Quality $\uparrow$ & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend \\
+ & \cellcolor{costrowcolor}Cost $\downarrow$ & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend \\
+\cmidrule(lr){1-6}
+\multirow{2}{*}{X} & \cellcolor{qualityrowcolor}Quality $\uparrow$ & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend \\
+ & \cellcolor{costrowcolor}Cost $\downarrow$ & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend \\
+\bottomrule
+\end{tabular}}
+\vspace{-10pt}
+\end{table}
+
+\subsection{(RQ3) Ablation Study} \label{sec:ablation-study}
+In this section, we ablate <two aspects>.
+
+\textbf{Impact of $\lambda_{\text{B}}$.} Figure~\ref{fig:alpha} plots the training curves for several values of $\lambda_{\text{B}}$.
+We have the following observations: \textbf{\draft{[Expected]} Raising $\lambda_{\text{B}}$ lifts <metric A> but also raises <risk>.}
+As shown in Figure~\ref{fig:alpha-a}, <evidence>.
+We therefore set $\lambda_{\text{B}}$ to <value> by default.
+Appendix~\ref{apdx:experiments} shows further training curves.
+
+% Paired panels: two subfigure[t]{0.49\columnwidth} + \hfill in ONE column
+% (each 1.59 in printed). Draw each panel ~3.75 in square (ticks 16 pt ->
+% ~6.8 pt printed). Keep subcaptions to ~4 words: longer ones wrap badly in a
+% 1.59 in box.
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}[t]{0.49\columnwidth}
+        \centering
+        \figplaceholder[2.8cm]{panel a}
+        \caption{On <subset A>.}
+        \label{fig:alpha-a}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.49\columnwidth}
+        \centering
+        \figplaceholder[2.8cm]{panel b}
+        \caption{On <subset B>.}
+        \label{fig:alpha-b}
+    \end{subfigure}
+    \caption{Training curves for different values of $\lambda_{\text{B}}$.}
+    \label{fig:alpha}
+    \vspace{-12pt}
+\end{figure}

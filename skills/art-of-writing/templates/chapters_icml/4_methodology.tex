@@ -1,0 +1,140 @@
+\section{Methodology}
+% Roadmap opener [most]. ICML budget: 1,000-1,150 prose words, ~2.4 pp
+% incl. 2 figure*, 1 column figure (text box), 1 algorithm [venue: ICML].
+In this section, we describe \textbf{X}, a <kind of> method with <two components> for <epithet> <task>.
+Section~\ref{sec:workflow} first describes the pipeline of X.
+After that, Section~\ref{sec:training} explains how X is trained, covering the loss design and how the loss terms are combined.
+Finally, Section~\ref{sec:inference} describes how X is used at test time.
+
+% Echo the core concepts (same phrase, unmarked) in titles or run-ins (concepts.md).
+\subsection{<Core Concept A> and <Core Concept B> in X} \label{sec:workflow}
+To remove <limitation 1> and <limitation 2>, we add <core concept A> and <core concept B> to the pipeline, following the success of <idea> \cite{Placeholder-C}.
+
+% Optional column-width text box as a figure [some]: shadowpromptbox at
+% \linewidth inside figure[t]; \small\ttfamily; full instructions go to
+% Appendix C.
+\begin{figure}[t]
+    \centering
+    \begin{shadowpromptbox}
+    \raggedright\small\ttfamily
+    <Instruction line 1: the task in one sentence.> \\
+    <Instruction line 2: what to read from the input.> \\
+    Give the answer in <answer></answer>.
+    \end{shadowpromptbox}
+    \caption{Instruction given to <module> of X (excerpt).}
+    \label{fig:prompt}
+    % No trim here: this box stacks directly above Algorithm 1 in the same
+    % column, and -12pt left 0.01 in under the caption (kit: >= 0.1 in). Add
+    % \vspace{-12pt} back only if body text, not another float, follows it.
+\end{figure}
+
+% Framework diagram: figure*[t] at 0.9\textwidth (= 6.1 in printed). A
+% two-column float never prints where it is defined: it goes to the TOP of the
+% NEXT page, so put \begin{figure*} about one page of source before the text
+% that discusses it.
+\begin{figure*}[t]
+    \centering
+    \begin{minipage}{0.9\textwidth}
+    \figplaceholder[4.2cm]{Framework (figure*[t], 0.9 textwidth = 6.1 in): left-to-right pipeline, two new modules in parallel, operator circle, bottom legend strip}
+    \end{minipage}
+    \caption{Overview of X. Given an input $\mathbf{x}_{i}$, the encoder $f_\theta$ produces $\mathbf{z}_{i}$. (1) <Component A> $a_\psi$ maps $\mathbf{z}_{i}$ to <output A> $\mathbf{c}_{i}$; (2) the head $h_\phi$ combines $\mathbf{z}_{i}$ and $\mathbf{c}_{i}$ into the prediction $\hat{\mathbf{y}}_{i}$.}
+    \label{fig:main-figure}
+    \vspace{-6pt}
+\end{figure*}
+
+Specifically, X changes only <module> and leaves <other module> untouched.
+For each input it returns a representation $\mathbf{z}_{i}$, an auxiliary output $\mathbf{c}_{i}$ and the prediction $\hat{\mathbf{y}}_{i}$:
+\begin{equation}
+\mathbf{z}_{i} = f_\theta(\mathbf{x}_{i}), \quad \mathbf{c}_{i} = a_\psi(\mathbf{z}_{i}), \quad \hat{\mathbf{y}}_{i} = h_\phi(\mathbf{z}_{i}, \mathbf{c}_{i}).
+\end{equation}
+Figure~\ref{fig:main-figure} gives an overview, and Figure~\ref{fig:prompt} shows the instruction <module> receives.
+Algorithm~\ref{alg:method} gives the complete procedure.
+
+% Algorithm: single-column algorithm[t] (~0.75 of a column), Input/Output/
+% Initialize rows, grey comments, the NOVEL part shaded with \tikzmk + \boxit
+% (outside algorithmic) [some]. Needs 2 passes.
+\begin{algorithm}[t]
+  \captionsetup{labelformat=default,labelsep=colon,name=Algorithm}  % "Algorithm 1:"
+  \caption{Training with X}
+  \label{alg:method}
+\begin{algorithmic}
+  \STATE {\bfseries Input:} Dataset $\mathcal{D}$, batch size $B$, epochs $E$.
+  \STATE {\bfseries Output:} Trained $f_\theta$, $a_\psi$, $h_\phi$.
+  \STATE {\bfseries Initialize:} $\theta \leftarrow \theta_{0}$, random $\psi, \phi$.
+  \FOR{$e = 1$ {\bfseries to} $E$}
+    \FOR{each batch $\mathcal{B} \subset \mathcal{D}$ of size $B$}
+      \STATE $\mathbf{z}_{i} = f_\theta(\mathbf{x}_{i})$ for all $i \in \mathcal{B}$
+      \STATE \tikzmk{algA}\CommentBelow{new components: auxiliary output and both loss terms}
+      \STATE $\mathbf{c}_{i} = a_\psi(\mathbf{z}_{i})$, \ $\hat{\mathbf{y}}_{i} = h_\phi(\mathbf{z}_{i}, \mathbf{c}_{i})$
+      \STATE compute $\bar{\ell}^{\text{A}}$ and $\bar{\ell}^{\text{B}}$ \Cmt{Eq.~\ref{eq:batch-terms}}\tikzmk{algB}
+      \STATE $\mathcal{L} \leftarrow \bar{\ell}^{\text{task}} + \lambda_{\text{A}}\bar{\ell}^{\text{A}} + \lambda_{\text{B}}\bar{\ell}^{\text{B}}$
+      \STATE update $\theta, \psi, \phi$ with $\nabla \mathcal{L}$
+    \ENDFOR
+  \ENDFOR
+  \STATE {\bfseries return} $f_\theta, a_\psi, h_\phi$.
+\end{algorithmic}
+\boxit[X]{PhaseABg}{algA}{algB}
+\end{algorithm}
+
+\subsection{<Training> with <Two Loss Terms>} \label{sec:training}
+To teach $a_\psi$ <role A> and $h_\phi$ <role B>, we add one loss term per component to the task loss.
+We first present the loss design in Section~\ref{sec:loss-design}.
+After that, Section~\ref{sec:loss-combination} explains how the terms are combined.
+Appendix~\ref{apdx:impl-details} lists further training details.
+
+% Third heading level is allowed (ICML: "no more than three levels"); it prints
+% in small caps.
+\subsubsection{Loss Design} \label{sec:loss-design}
+\textbf{<Core concept A> term.}
+The auxiliary output is trained toward <reference signal> whenever that signal is available.
+For example $i$ this term is:
+% cases with short text conditions fits one column [venue: ICML].
+\begin{equation}
+\ell_{i}^{\text{A}} =
+\begin{cases}
+  \|\mathbf{c}_{i} - \mathbf{c}_{i}^{\text{ref}}\|_{2}^{2}, & \mathbf{c}_{i}^{\text{ref}} \text{ known}, \\
+  0, & \text{otherwise}.
+\end{cases}
+\end{equation}
+\textbf{<Core concept B> term.}
+We penalise confident mistakes, relative to a confidence threshold $\tau$:
+\begin{equation}
+\ell_{i}^{\text{B}} =
+\begin{cases}
+  \hat{p}_{i} - \tau, & \hat{p}_{i} > \tau \text{ and wrong},\\
+  0, & \hat{p}_{i} \leq \tau, \\
+  0, & \text{correct}.
+\end{cases}
+\end{equation}
+Under this design, <interpretation>.
+
+\subsubsection{Loss Combination} \label{sec:loss-combination}
+% Large illustration: figure*[t] at the FULL \textwidth (6.75 in); defined at
+% the start of the subsection -> prints atop the next page.
+\begin{figure*}[t]
+    \centering
+    \figplaceholder[3.8cm]{Large illustration (figure*[t], full textwidth = 6.75 in): items grouped on grey panels, one bar per group, combining formula below, right legend}
+    \caption{How the two loss terms are computed from one mini-batch. $\bar{\ell}^{\text{A}}$ averages over the examples with a known reference, and $\bar{\ell}^{\text{B}}$ over the whole batch (\ie Equation~\ref{eq:batch-terms}).}
+    \label{fig:loss-terms}
+    \vspace{-6pt}
+\end{figure*}
+Following \cite{Placeholder-B}, we average each term over the examples it applies to, as illustrated in Figure~\ref{fig:loss-terms}:
+% ONE definition per row [venue: ICML]: two definitions on one line push the
+% equation number to its own line in the 3.25 in column (tectonic + Times) and
+% overflow under Latin Modern. Stack them instead:
+\begin{equation}
+\label{eq:batch-terms}
+\begin{aligned}
+\bar{\ell}^{\text{A}} &= \frac{1}{|\mathcal{B}^{\text{ref}}|}\sum_{i \in \mathcal{B}^{\text{ref}}}{\ell_{i}^{\text{A}}},\\
+\bar{\ell}^{\text{B}} &= \frac{1}{|\mathcal{B}|}\sum_{i \in \mathcal{B}}{\ell_{i}^{\text{B}}}.
+\end{aligned}
+\end{equation}
+Finally, the total loss adds both terms to the task loss of Equation~\ref{eq:objective}:
+\begin{equation}
+\label{eq:total-loss}
+\mathcal{L} = \bar{\ell}^{\text{task}} + \lambda_{\text{A}}\, \bar{\ell}^{\text{A}} + \lambda_{\text{B}}\, \bar{\ell}^{\text{B}},
+\end{equation}
+where the hyperparameters $\lambda_{\text{A}}$ and $\lambda_{\text{B}}$ set the weight of each term.
+
+\subsection{Test-Time Usage} \label{sec:inference}
+X can run with <component A> (full model) or without it (the head reads $\mathbf{z}_{i}$ alone), so users can trade <cost> for <quality>.

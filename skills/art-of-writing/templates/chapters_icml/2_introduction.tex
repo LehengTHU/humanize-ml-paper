@@ -1,0 +1,58 @@
+\section{Introduction}
+
+% Teaser: figure[t] at \columnwidth, FIRST thing in the intro file [most]. In
+% two columns it floats to the top of the right column of p1, next to the
+% abstract (skeleton build: Figure 1 on p1). It shows the PRIOR paradigm and
+% its two failure modes, not results [some]. Printed size 3.25 in wide; a
+% drawing about 2.8 in tall + caption fits beside the abstract.
+% No negative \vspace before \caption at ICML: the kit wants >= 0.1 in before
+% and after captions (icml2026.sty skip=0.1in) [fix]; only the trim after
+% \label stays (references/venues.md section 1.2 Spacing).
+\begin{figure}[t]
+    \centering
+    \figplaceholder[5.2cm]{Teaser (figure[t], \textbackslash columnwidth = 3.25 in): prior pipeline on top, two small panels naming the two failure modes below, one legend row}
+    \caption{<Prior> and its two weaknesses. <One sentence on how the prior paradigm works>. It risks <risk 1> and <risk 2>.}
+    \label{fig:teaser-figure}
+    \vspace{-12pt}
+\end{figure}
+
+% P1 importance -> challenge (2 sentences).
+<Task> is central to many real-world applications \cite{Placeholder-A, Placeholder-B}, including <application 1> and <application 2> \cite{Placeholder-C}.
+Yet it remains hard in practice: <difficulty 1> \cite{Placeholder-A}, and <difficulty 2> \cite{Placeholder-B}.
+
+% P2 the prior paradigm, concretely, with the notation the Preliminary reuses.
+To overcome these difficulties, <Prior> \cite{Placeholder-A} recently introduced a <paradigm> for <task>.
+As Figure~\ref{fig:teaser-figure} shows, rather than <old way>, it casts <task> as <new formulation>.
+Concretely, <symbol-level description: $\mathcal{D}$, $\mathbf{x}_i$, $f_\theta$, $\mathbf{z}_i$>.
+Optimized end-to-end with <training> \cite{Placeholder-B}, this paradigm partly alleviates <problem>.
+
+% P3 two limitations as a bold-titled bullet list [some]; each item opens
+% "As shown in Figure~\ref{fig:teaser-figure}, ...". itemize[leftmargin=*] keeps the
+% bullets inside the 3.25 in column.
+However, the vanilla design keeps the weaknesses of <root cause> \cite{Placeholder-C}.
+Two limitations in particular restrict the <twin concepts> of <task>:
+% concepts: mark each key concept once here with \concept{phrase} (+ \citep when borrowed); echo the exact phrase later, unmarked
+\begin{itemize}[leftmargin=*]
+    \item \textbf{<Limitation 1 as Noun Phrase>.}
+    As shown in Figure~\ref{fig:teaser-figure}, <mechanism>. Consequently, <consequence>.
+    \item \textbf{<Limitation 2 as Noun Phrase>.}
+    As shown in Figure~\ref{fig:teaser-figure}, <mechanism>. For instance, even after <condition> (\eg <example>), <consequence>.
+\end{itemize}
+
+% P4 method: "To this end ..." + key idea split as "(i) ... and (ii) ..." [some].
+To this end, we propose a <kind of> framework, \textbf{X}, for <epithet> <task> that adapts <idea> \cite{Placeholder-C}.
+Our key idea is to extend <workflow> with two <components> --- \concept{<core concept A>} and \concept{<core concept B>} --- that (i) <role A> and (ii) <role B>.
+Specifically, for each input $\mathbf{x}_i$, <module> produces <outputs>, formulated as $\hat{\mathbf{y}}_i = h_\phi(\mathbf{z}_i, a_\psi(\mathbf{z}_i))$ with $\mathbf{z}_i = f_\theta(\mathbf{x}_i)$.
+We learn both components with <two loss terms> inside <training>, which encourage <behaviour A> and <behaviour B>, respectively.
+<Component A> brings <benefit A>, whereas <component B> brings <benefit B>; combined, they make <task> more <epithet>.
+
+% P5 experiment summary, one "(\cf Section~\ref{})" per RQ subsection, same order.
+We validate X through extensive experiments.
+First, X generally outperforms <Prior> across tasks and model sizes (\cf Section~\ref{sec:main-performance}).
+Second, we confirm that <core concept A> and <core concept B> behave as intended (\cf Section~\ref{sec:mechanism}).
+Third, an ablation study isolates the contribution of each component (\cf Section~\ref{sec:ablation-study}).
+
+% Camera-ready ONLY, if a financial conflict exists (ICML 2026 Author
+% Instructions): last paragraph of the introduction, titled exactly
+% "Conflict of Interest Disclosure". Omit it otherwise.
+% \textbf{Conflict of Interest Disclosure.} One author (<initials>) is employed by <company>, which develops <model>, one of the models evaluated in this paper.

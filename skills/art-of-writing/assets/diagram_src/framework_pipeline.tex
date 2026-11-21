@@ -1,0 +1,73 @@
+% target-width-in: 6.10
+% framework_pipeline -- framework figure* at 0.9\textwidth (one-column venues), on invented content.
+% Invented method "X": score each candidate for difficulty and diversity, sample by the product, train,
+% and feed the loss change back to both scorers. Running example: the shared prompt pool of the teasers.
+% Roles: rose = trainable, navy = fixed rule (the focal module, filled), amber = score / feedback.
+\documentclass[tikz,border=1pt]{standalone}
+\usepackage{housediagram}
+\begin{document}
+\begin{tikzpicture}
+  % ------------------------------------------------------------------ 1. candidate batch
+  \node[chip, tagged=1, text width=63pt] (c1) {\hdquote{2 + 3 = ?}};
+  \node[chip, tagged=2, text width=63pt, below=4.5pt of c1] (c2) {\hdquote{Add 2 and 3}};
+  \node[chip, tagged=3, text width=63pt, below=4.5pt of c2] (c3) {\hdquote{Sort [3, 1, 2]}};
+  \node[chip, tagged=4, text width=63pt, below=4.5pt of c3] (c4) {\hdquote{Prove~${\smash{\sqrt{2}}\notin\mathbb{Q}}$}};
+  \hdlane{batch}{(c1)(c4)}
+  \node[input square, left=16pt of batch] (D) {$\mathcal{D}$};
+  \draw[data flow] (D) -- node[note, above=0.5pt] {Draw} (batch);
+
+  % ------------------------------------------------------------------ 2. dual scoring
+  \node[trainable, minimum width=74pt, minimum height=33pt, anchor=north west] (s1)
+    at ([xshift=18pt]batch.east |- c1.north) {\hdtitle{Difficulty Scorer}\\[0.6pt] $w_i = g_\phi(x_i)$};
+  \node[trainable, minimum width=74pt, minimum height=33pt, anchor=south west] (s2)
+    at ([xshift=18pt]batch.east |- c4.south) {\hdtitle{Diversity Scorer}\\[0.6pt] $q_i = h_\psi(x_i, \mathcal{B}_t)$};
+  \hdlane{score}{(s1)(s2)}
+  \draw[data flow] (batch.east) -- ++(8pt,0) |- (s1.west);
+  \draw[data flow] (batch.east) -- ++(8pt,0) |- (s2.west);
+  \node[note, anchor=west] at ([xshift=9.5pt]batch.east) {$x_i$};
+
+  % ------------------------------------------------------------------ 3. quota sampling (focal module)
+  \node[hero, minimum width=68pt, minimum height=35pt, right=18pt of score] (smp)
+    {\hdtitle{Quota Sampler}\\[1pt] $p_t(x_i) \propto w_i\, q_i$};
+  \draw[score flow] (s1.east) -- node[note, above=0.5pt] {$w_i$} ++(13pt,0) |- ([yshift=5pt]smp.west);
+  \draw[score flow] (s2.east) -- node[note, below=0.5pt] {$q_i$} ++(13pt,0) |- ([yshift=-5pt]smp.west);
+
+  \coordinate (selx) at ([xshift=22pt]smp.east);
+  \node[token selected] (t1) at (selx |- c1) {1};
+  \node[token dropped]  (t2) at (selx |- c2) {2};
+  \node[token selected] (t3) at (selx |- c3) {3};
+  \node[token selected] (t4) at (selx |- c4) {4};
+  \node[note, right=3pt of t1] (p1) {.20};
+  \node[note, right=3pt of t2, text=hdcoral] (p2) {.04};
+  \node[note, right=3pt of t3] (p3) {.34};
+  \node[note, right=3pt of t4] (p4) {.42};
+  \pic at ([xshift=6.5pt]p2.east) {bad};
+  \coordinate (xmark) at ([xshift=10.7pt]p2.east);
+  \hdlane{sel}{(t1)(t4)(p1)(xmark)}
+  \draw[data flow] (smp.east) -- node[note, above=0.5pt] {$p_t$} (sel.west |- smp.east);
+
+  % ------------------------------------------------------------------ 4. model update + feedback
+  \node[trainable, minimum width=50pt, minimum height=35pt, right=13.5pt of sel] (model)
+    {\hdtitle{Model}\\[1pt] $f_\theta$};
+  \draw[data flow] (sel.east |- model.west) -- node[note, above=0.5pt] {$\mathcal{S}_t$} (model.west);
+  \coordinate (fb) at ([yshift=-11pt]batch.south);
+  \draw[feedback flow] (model.south) -- (model.south |- fb)
+    -- node[pill] {$\Delta\ell$ updates $\phi, \psi$} (score.south |- fb) -- (score.south);
+
+  % ------------------------------------------------------------------ stage headers (one baseline)
+  \coordinate (H) at ([yshift=7pt]batch.north);
+  \node[header, anchor=base] at (batch.north |- H) {Candidate Batch $\mathcal{B}_t$};
+  \node[header, anchor=base] at (score.north |- H) {Dual Scoring};
+  \node[header, anchor=base] at ($(smp.west |- H)!0.5!(sel.east |- H)$) {Quota Sampling};
+  \node[header, anchor=base] at (model.north |- H) {Model Update};
+
+  % ------------------------------------------------------------------ legend (one row, centred under the loop)
+  \matrix[legend row, anchor=north] at ([yshift=-8pt]$(D.west |- fb)!0.5!(model.east |- fb)$) {
+    \pic {key box={trainable}{Trainable}}; &
+    \pic {key box={hero}{Fixed rule}}; &
+    \pic {key pair={token selected}{token dropped}{Selected / skipped}}; &
+    \pic {key arrow={score flow}{Score}}; &
+    \pic {key arrow={feedback flow}{Feedback}}; \\
+  };
+\end{tikzpicture}
+\end{document}

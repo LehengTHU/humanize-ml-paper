@@ -1,0 +1,137 @@
+%% main_skeleton_icml.tex -- ICML main file in the house project layout
+%% (two-column house layout [venue: ICML], official template order).
+%% Copy next to: icml2026.sty, icml2026.bst, algorithm.sty, algorithmic.sty,
+%% fancyhdr.sty (official ICML 2026 zip; NOT bundled with this skill, see
+%% templates/venue/icml/README.md), preamble.tex and references.bib (this
+%% folder), and chapters/ (copy templates/chapters_icml/ to chapters/).
+%% The kit's stock name example_paper.tex for the main file is common; any name works.
+%%
+%% Build (tectonic 0.17, network allowed):
+%%   tectonic -X compile --keep-intermediates main_skeleton_icml.tex
+%% If tectonic times out fetching a font (e.g. cmti9.pfb, cmsy5.pfb; cmti9 is
+%% needed only by [accepted]), fetch it with scripts/tectonic_fetch.sh and add
+%% -Z search-path=<fontdir> (references/venues.md section 2.3).
+%%
+%% ICML 2027 files were not released on 2026-09-25 (icml.cc/Conferences/2027/
+%% CallForPapers returned 404). When they appear, swap icml2026 -> icml2027 in
+%% \usepackage and \bibliographystyle and re-check references/venues.md section 1.0.
+
+\documentclass{article}
+\PassOptionsToPackage{table}{xcolor}   % BEFORE icml2026: loading [table]{xcolor}
+                                       % after the style is an "Option clash"
+                                       % (verified with tectonic)
+\usepackage[T1]{fontenc}               % XeTeX/tectonic: without T1 the style's
+                                       % Times (ptm) has no TU shape and the whole
+                                       % paper silently falls back to Latin Modern
+                                       % (log: "Font shape TU/ptm/m/n undefined";
+                                       % the running head then reads
+                                       % "Title Suppressed Due to Excessive Size")
+
+% --- Official ICML header (template order) --------------------------------
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\newcommand{\theHalgorithm}{\arabic{algorithm}}   % hyperref + algorithm (template)
+
+% Initial blind submission (anonymous; grey line-number ruler in the left margin):
+\usepackage{icml2026}
+% Preprint (authors shown, "Preprint. <date>" footer, no ruler):
+% \usepackage[preprint]{icml2026}
+% Camera-ready (authors, PMLR notice, no ruler; +1 page):
+% \usepackage[accepted]{icml2026}
+
+% Do NOT load the template's cleveref / todonotes / theorem block: house style
+% never uses cleveref and preamble.tex defines the theorem set (to follow the
+% kit's preferred shared theorem counter instead, see references/venues.md
+% section 3.4). Everything else is the shared preamble.
+\input{preamble}
+
+% ---- Concept table (references/concepts.md): 2-5 core (max 6) + <= 6 framing terms.
+% Borrow the literature's term before coining; one concept = one exact phrase; echo core concepts
+% (same phrase, unmarked) in the Methodology, Experiments and Conclusion.
+% Term table (references/concepts.md section 3): every key term needs a citation key + a quote (<= 15 words)
+% copied from the cited paper, same sense; plain / coined otherwise (coined <= 2); "fixed" terms are not exempt.
+% concept: <core concept A> | core | borrowed: <citekey> "<quote from the cited paper, same sense>" | <definition>
+% concept: <core concept B> | core | composed: <part> (<citekey> "<quote>") + <part> (plain) | <definition>
+% concept: <framing term> | framing | borrowed: <citekey> "<quote>" | <definition>
+% term: <component / metric / recurring noun> | borrowed: <citekey> "<quote>" | <definition> | other senses: <none or list>
+% epithet: <two-word method epithet = negation of the two drawback labels; verbatim in abstract, intro, Methodology opener, Conclusion>
+% \showconceptsfalse      % uncomment for the submitted / camera-ready PDF (black text)
+
+% Short running head; needed whenever the title runs over one line.
+% Keep this paper's rejected titles commented here [some].
+\icmltitlerunning{Short Running Title for the Paper}
+
+\begin{document}
+
+\twocolumn[
+  % "<Hook>: \\ <Descriptive Subtitle>" [some] or "Verb-ing <Object> with <Key
+  % Ingredient>" [most]. Content words capitalized (ICML rule).
+  \icmltitle{Hook Phrase: \\ Descriptive Subtitle of the Method}
+
+  % Author block is typed in full even for submission: icml2026.sty hides it
+  % unless [accepted] or [preprint] is given (template comment).
+  \icmlsetsymbol{equal}{*}
+
+  \begin{icmlauthorlist}
+    \icmlauthor{Firstname1 Lastname1}{aff1}
+    \icmlauthor{Firstname2 Lastname2}{aff2}
+    \icmlauthor{Firstname3 Lastname3}{aff1}
+    % Break a long list with "\\" after the fifth author.
+  \end{icmlauthorlist}
+
+  \icmlaffiliation{aff1}{Department, University, City, Country}
+  \icmlaffiliation{aff2}{Company, City, Country}
+
+  \icmlcorrespondingauthor{Firstname1 Lastname1}{first1.last1@xxx.edu}
+
+  \icmlkeywords{Machine Learning, ICML}
+
+  \vskip 0.3in
+]
+
+% REQUIRED even when empty (official template). Equal contribution:
+% \printAffiliationsAndNotice{\icmlEqualContribution}
+\printAffiliationsAndNotice{}
+\suppressfloats[t]   % [skill choice]: with a short abstract a [t] teaser floats
+                     % to the top of the LEFT column, above the abstract (seen in
+                     % this skeleton's first build). This keeps column 1 free so
+                     % the teaser lands atop column 2 of p1, next to the abstract.
+                     % Delete once the real abstract and intro fill column 1.
+
+\input{chapters/1_abstract}
+\input{chapters/2_introduction}
+\input{chapters/3_preliminary}
+\input{chapters/4_methodology}
+\input{chapters/5_experiments}
+\input{chapters/6_conclusion}         % Limitations + Conclusion; \label{main-text-end}
+
+% --- Not counted toward the page limit (ICML 2026 CFP) ---------------------
+\clearpage                            % statements start a fresh page, so the
+                                      % main body visibly ends on p8 (p9 CR)
+\section*{Impact Statement}
+% Mandatory for the main track, at submission too (CFP "Impact Statements";
+% Author Instructions "Impact statement is mandatory for the main track").
+% Either the CFP's verbatim sentence:
+% This paper presents work whose goal is to advance the field of machine learning. There are many potential societal consequences of our work, none of which we feel must be specifically highlighted here.
+% or the house three-sentence pattern (aim + benefit / positive effect / one risk):
+The goal of this work is to make <task> more <epithet> through <mechanism>, which can help applications such as <application>.
+We expect its main societal effect to be positive, for example <concrete benefit>.
+One risk is that <failure mode> may mislead users who rely on its outputs without checking them.
+
+% Camera-ready only (never at submission: CFP / Author Instructions forbid
+% acknowledgements and grant numbers in the blind version):
+% \section*{Acknowledgements}
+% This research is supported by <grant> (<number>).
+
+\bibliography{references}
+\bibliographystyle{icml2026}
+
+\input{chapters/7_appendix}           % \newpage \appendix \onecolumn
+\input{chapters/8_appendix}           % A Related Works, then every appendix section
+                                      % (one file named after its content,
+                                      % latex_source.md section 11)
+
+\end{document}

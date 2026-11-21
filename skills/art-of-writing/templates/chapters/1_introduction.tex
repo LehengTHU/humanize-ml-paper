@@ -1,0 +1,56 @@
+% Introduction: 650-750 prose words, 4-5 paragraphs of median 4-6 sentences,
+% one teaser, at most one bullet list. NO contribution list, NO "rest of the
+% paper" paragraph [all]. No section roadmap here (the intro has none).
+% Source conventions: one sentence per line; keep replaced wording as a %
+% comment next to the new line (structure.md section 3).
+% The slots below are type-neutral. For the P2-P4 wording of your paper type
+% (W workflow with components, T objective + constraint with a closed form,
+% L loss with theory, R reward/supervision design, F findings paper) open
+% references/paper_types.md.
+\section{Introduction} \label{sec:introduction}
+
+\begin{figure*}[t]
+    \centering
+    \figplaceholder[3.4cm]{Teaser (0.4--0.5 pp): the problem / key idea, ideally with evidence panels; concrete example inside}
+    \vspace{-8pt}
+    \caption{<Title-like phrase>. <What the method does in one sentence>. <The two risks / the takeaway>.}
+    \label{fig:teaser-figure}
+    \vspace{-12pt}
+\end{figure*}
+
+% P1 context -> importance -> current practice -> gap and consequence (2-4 sentences)
+<Task> is central to many real-world applications \citep{Placeholder-A, Placeholder-B}, including <application> \citep{Placeholder-C}.
+Yet it remains hard in practice: <difficulty 1> \citep{Placeholder-A}, and <difficulty 2> \citep{Placeholder-B}.
+
+% P2 the current paradigm made concrete, with its core formula in the
+% Preliminary's symbols and a concrete quoted example [most] -- or the
+% challenge + ONE bold-italic question [some]: \textit{\textbf{Can ... ?}} If so, ...
+<Paradigm> \citep{Placeholder-A} has recently become a popular way to handle <task> without <cost>.
+As Figure~\ref{fig:teaser-figure} illustrates, it takes an input (\eg ``<concrete example>'') and <operation of the prior method> to produce <output>.
+In practice, <implementation fact>.
+
+% P3 the PAIR of limitations: bold-headed bullets of 85-115 words each [some],
+% or two prevailing strategies + their shared flaw [some], or an enabling
+% research line with "On the one hand ... On the other hand" [some]
+However, <the prevailing approach> carries over the weaknesses of <root cause> \citep{Placeholder-B}.
+In particular, two limitations restrict the <twin concepts> of <task>:
+% concepts: mark each key concept once here with \concept{phrase} (+ \citep when borrowed); echo the exact phrase later, unmarked
+\begin{itemize}[leftmargin=*]
+    \item \textbf{<Limitation 1 as a noun phrase>.} Figure~\ref{fig:teaser-figure} shows that <mechanism>. <Consequence>. Consequently, <gap>.
+    \item \textbf{<Limitation 2 as a noun phrase>.} <Mechanism>. For instance, <concrete case (\eg ...)>. The problem grows worse when <condition>.
+\end{itemize}
+
+% P4 proposal -> one-sentence key idea with (i)/(ii) -> mechanism with the
+% Methodology's inline formula -> (training) -> benefit closer
+To this end, we propose a <kind of> approach, \textbf{X}, for <epithet> <task> that borrows the idea of <idea> from <field> \citep{Placeholder-C}.
+Our key idea is to <precise verb> <object> with two <components or objectives> --- \concept{<core concept A>} and \concept{<core concept B>} --- which guarantee (i) <property 1> and (ii) <property 2>.
+Concretely, <how A and B work, naming each symbol>, written compactly as <core formula in the Methodology's symbols>.
+<Optional training sentence, training-based methods only: "We learn these behaviours with <signals> ...">
+<A> delivers <benefit A> and removes <limitation 1>, whereas <B> delivers <benefit B>; combined, they make <task> more <epithet>.
+
+% P5 evidence roadmap: one sentence per experiment subsection, same order as RQs
+We validate X through extensive experiments.
+First, X generally outperforms <baseline> across <tasks> and model sizes (\cf Section~\ref{sec:main-performance}).
+Second, we show that <component A> <effect> and that <component B> <effect> (\cf Section~\ref{sec:mechanism}).
+Third, an ablation study isolates the contribution of each component (\cf Section~\ref{sec:ablation}).
+Overall, X offers a <epithet> recipe for <task> built around <key ingredient>.

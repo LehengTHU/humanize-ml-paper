@@ -1,0 +1,48 @@
+\section{Preliminary}
+% Roadmap opener [most]; two subsections (550-650 prose words, ~0.9 pp [venue: ICML]).
+Section~\ref{sec:task-formulation} first defines <task>.
+After that, Section~\ref{sec:base-paradigm} reviews the <paradigm> proposed by <Prior> \cite{Placeholder-A}.
+
+\subsection{Task Formulation} \label{sec:task-formulation}
+\textbf{<Task name>.} We focus on <task> \cite{Placeholder-A, Placeholder-B}.
+Each example is a pair $(\mathbf{x}_i, \mathbf{y}_i)$ of an input and its target, drawn from a dataset $\mathcal{D} = \{(\mathbf{x}_i, \mathbf{y}_i)\}_{i=1}^{N}$.
+
+\subsection{<Base Paradigm> for <Task>} \label{sec:base-paradigm}
+\textbf{Pipeline.}
+As shown in Figure~\ref{fig:teaser-figure}, the encoder $f_\theta$ maps each input to a representation $\mathbf{z}_i$, and the head $h_\phi$ maps it to a prediction:
+\begin{equation}
+\hat{\mathbf{y}}_{i} = h_\phi(\mathbf{z}_{i}), \quad \mathbf{z}_{i} = f_\theta(\mathbf{x}_{i}).
+\end{equation}
+
+\textbf{Optimization.}
+% Narrow-column display [venue: ICML]: a long objective is ONE equation +
+% aligned, broken by hand into rows of <= ~3.1 in, with "\text{where}\quad" /
+% "\text{and}\quad" continuation rows instead of a separate "where"
+% paragraph. Never \resizebox an equation; never \small.
+The training objective reads:
+\begin{equation}
+\begin{aligned}
+\mathcal{J}(\theta, \phi)
+= \ &\mathbb{E}_{\mathcal{B}\sim \mathcal{D}}
+\Bigg[
+\frac{1}{|\mathcal{B}|}\sum_{i \in \mathcal{B}}
+\Big(\ell_{i} + \mu\, \|\mathbf{z}_{i}\|_{1}\Big)
+\Bigg]\\
+&+ \lambda\, \Omega(\theta, \theta_{0}),\\
+\text{where}\quad & \Omega(\theta, \theta_{0})
+= \|\theta - \theta_{0}\|_{2}^{2},\\
+\text{and}\quad & \mu, \lambda \geq 0.
+\end{aligned}
+\label{eq:objective}
+\end{equation}
+Here $\theta_{0}$ denotes the pretrained encoder weights, and $\ell_{i}$ is the per-example loss.
+Each example is scored as:
+\begin{equation}\label{eq:example-score}
+\ell_{i} = -\log p_\phi(\mathbf{y}_{i} \mid \mathbf{z}_{i}),
+\end{equation}
+where $p_\phi$ is the predictive distribution of the head.
+The loss is small when the head assigns high probability to the target $\mathbf{y}_{i}$.
+
+% Hand-off to the Methodology: the two limitations [all] (papers with a Preliminary).
+This training markedly improves <capability>.
+Nevertheless, <limitation 1> and <limitation 2> keep the vanilla approach from reaching the <twin concepts> that <task> needs.

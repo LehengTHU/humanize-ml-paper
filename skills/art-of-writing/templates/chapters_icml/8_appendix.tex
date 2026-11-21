@@ -1,0 +1,72 @@
+% Related Works is Appendix A, and the same file carries every other appendix
+% section, each opened by \clearpage with an apdx: label [venue: ICML]. The
+% file is named after its content (latex_source.md section 11).
+% Floats here use [ht]/[!ht].
+\section{Related Works} \label{apdx:related-works}
+% 3 subsections x one paragraph (100-170 words each).
+\subsection{<Base Paradigm>}
+<Field> is still hard for current models \cite{Placeholder-A}. Existing approaches mostly belong to <A> \cite{Placeholder-B} or <B> \cite{Placeholder-C}. Both, however, share <shared limitation>.
+
+\subsection{<Enabling Technique>}
+<Technique> has started to attract attention \cite{Placeholder-A, Placeholder-B}. Although useful, these methods are prone to <limitation 1> and <limitation 2>.
+
+\subsection{<Form of Supervision>}
+On the one hand, <line 1> \cite{Placeholder-B}. On the other hand, <line 2> \cite{Placeholder-C}. This progress motivates our design of <component>.
+
+\clearpage
+\section{Implementation Details} \label{apdx:impl-details}
+All experiments use the <framework>\footnote{<framework URL>} framework.
+Table~\ref{tab:hyper} lists the key hyperparameters.
+
+\begin{table}[ht]
+\centering
+\caption{Key hyperparameters.}
+\label{tab:hyper}
+\begin{tabular}{l|c}
+\toprule
+\textbf{Hyperparameter} & \textbf{Value} \\
+\midrule
+Learning rate & \pend \\
+Batch size & \pend \\
+Random seeds & \pend \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\clearpage
+\section{Prompts} \label{apdx:prompts}
+Figure~\ref{fig:full-prompt} shows the full instruction given to <module> of X.
+\begin{figure}[ht]
+    \centering
+    \begin{gptpromptbox}
+    \raggedright\small\ttfamily
+    <full prompt text>
+    \end{gptpromptbox}
+    \caption{Full prompt of X.}
+    \label{fig:full-prompt}
+\end{figure}
+
+\clearpage
+\section{Experiments} \label{apdx:experiments}
+% Subsections mirror the RQs. Paired panels at 0.49\columnwidth (= 3.3 in here).
+\subsection{Results Across <Sweep>} \label{apdx:sweep}
+Figure~\ref{fig:apdx-sweep} shows the results across <sweep>.
+\begin{figure}[!ht]
+    \centering
+    \begin{subfigure}[t]{0.49\columnwidth}
+        \centering
+        \figplaceholder[3cm]{Model-L}
+        \caption{Model-L.}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.49\columnwidth}
+        \centering
+        \figplaceholder[3cm]{Model-S}
+        \caption{Model-S.}
+    \end{subfigure}
+    \caption{Results across <sweep> on <task>.}
+    \label{fig:apdx-sweep}
+\end{figure}
+
+\clearpage
+\section{Case Study} \label{apdx:case-study}
+This section walks through several examples of X in action.

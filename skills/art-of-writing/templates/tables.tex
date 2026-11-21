@@ -1,0 +1,302 @@
+%% tables.tex -- table library in the house style. Copy ONE float at a time
+%% into a chapter; do not \input this whole file into a paper (labels repeat
+%% the template names). Preview all samples with templates/tables_preview.tex.
+%% Needs templates/preamble.tex (\pend, \ablation, \shrinktofit, oursrow,
+%% oursrowblue, qualityrowcolor, costrowcolor, colours + and -).
+%% Rules (references/figures_tables.md section 7): table* for the main table
+%% even in one-column venues; caption ABOVE; \label after the tabular;
+%% negative \vspace at the end; booktabs + a "|" after the row labels; width
+%% only by scaling (never \small); bold header row; bold best (ties both bold);
+%% \midrule\midrule between model scales; \arraystretch INSIDE the float.
+%% Arrows: write $\uparrow$/$\downarrow$ [fix]: a typed Unicode arrow, common
+%% in practice, vanishes under XeLaTeX with Times.
+%% Width: house practice writes \resizebox{w\linewidth}{!}{...}. That also
+%% enlarges a narrow table (its text then prints larger than body text), so
+%% these samples use \shrinktofit{w\linewidth}{...} (preamble B8), which
+%% scales only when the tabular is wider than w.
+%% No results yet: keep the full row/column structure and fill cells with
+%% \pend (renders "--"); never type made-up numbers [some].
+%% Stacking: the negative end \vspace assumes TEXT follows the float. Two
+%% floats stacked on one page overlap, so the samples below are separated by
+%% \clearpage (harness only; do not copy those lines into a paper).
+%%
+%% WHICH MAIN TABLE (references/figures_tables.md section 7, "Main-table variants"):
+%%   T1  scale-grouped, one baseline family, one metric      [some]
+%%   T2  many baselines per backbone, one metric, Avg column [some]
+%%   T4  quality + cost as a co-claim                         [some]
+%% "(Ours)" appears only in baseline-heavy tables (T2); T1 and T4 name the
+%% method alone and rely on shading.
+
+%% ------------------------------------------------------------------------
+%% T1. Main results, scale-grouped, EMPTY placeholder cells  [some; current]
+%% No Avg column, no arrows (one metric, stated in the caption or the setup),
+%% our row shaded gray per cell, method name without "(Ours)".
+%% \cellcolor per cell (not \rowcolor) because \rowcolor paints over the
+%% \multirow label. Optional Avg column: change the spec to cl|cccccc|c and
+%% add \textbf{Avg.} only when all columns share one metric [some].
+%% The grey ablation row is optional [some].
+%% ------------------------------------------------------------------------
+\begin{table*}[!t]
+\centering
+\renewcommand{\arraystretch}{0.9}
+\caption{Results on <task> benchmarks at two model scales. The best result in each column is \textbf{bold}; the grey ablation row (\ie X (w/o C1)) is not ranked.}
+\makebox[\linewidth][c]{%
+  \shrinktofit{0.92\linewidth}{%
+    \begin{tabular}{cl|cccccc}
+    \toprule
+    \multicolumn{2}{c|}{\textbf{}} & \multicolumn{6}{c}{\textbf{Datasets}} \\
+    \textbf{Scale} & \textbf{Method} & \textbf{Bench-1} & \textbf{Bench-2} & \textbf{Bench-3}
+      & \textbf{Bench-4} & \textbf{Bench-5} & \textbf{Bench-6} \\
+    \midrule
+    % ===================== Scale: small =====================
+    \multirow{6}{*}{Small}
+    & Base & \pend & \pend & \pend & \pend & \pend & \pend \\
+    & SFT  & \pend & \pend & \pend & \pend & \pend & \pend \\
+    \cmidrule(lr){2-8}
+    & + Baseline-A & \pend & \pend & \pend & \pend & \pend & \pend \\
+    & + Baseline-B & \pend & \pend & \pend & \pend & \pend & \pend \\
+    & \ablation{+ X (w/o C1)} & \ablation{\pend} & \ablation{\pend} & \ablation{\pend}
+      & \ablation{\pend} & \ablation{\pend} & \ablation{\pend} \\
+    & \cellcolor{oursrow}+ X
+      & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend
+      & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend \\
+    \midrule\midrule
+    % ===================== Scale: large =====================
+    \multirow{6}{*}{Large}
+    & Base & \pend & \pend & \pend & \pend & \pend & \pend \\
+    & SFT  & \pend & \pend & \pend & \pend & \pend & \pend \\
+    \cmidrule(lr){2-8}
+    & + Baseline-A & \pend & \pend & \pend & \pend & \pend & \pend \\
+    & + Baseline-B & \pend & \pend & \pend & \pend & \pend & \pend \\
+    & \ablation{+ X (w/o C1)} & \ablation{\pend} & \ablation{\pend} & \ablation{\pend}
+      & \ablation{\pend} & \ablation{\pend} & \ablation{\pend} \\
+    & \cellcolor{oursrow}+ X
+      & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend
+      & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend & \cellcolor{oursrow}\pend \\
+    \bottomrule
+    \end{tabular}}}
+\label{tab:main-table}
+\vspace{-16pt}
+\end{table*}
+
+%% Filling rule once numbers exist: 2 decimals for % metrics [most], 1 decimal
+%% for aggregate 0-100 scores [some], 3 decimals for scores in [0,1],
+%% integers for count metrics; bold the best non-ablation value per column,
+%% e.g.
+%%   & \cellcolor{oursrow}\textbf{63.87}
+%% No +/- std in the main table (variance goes to the appendix).
+
+\clearpage % harness separator -- do not copy
+
+%% ------------------------------------------------------------------------
+%% T2. Per-backbone "+ Method" rows with an average column  [some]
+%% Baseline-heavy papers (>= 3 baselines from >= 2 families, several backbone
+%% families): Avg column behind "|", arrow + unit in the spanner and the Avg
+%% header, bold "+ X (Ours)" row shaded blue, grey ablation row.
+%% (\citeauthor{}, \citeyear{}) row labels are the ICLR/ICML author-year
+%% form; under NeurIPS numeric citations write "+ Baseline-A \cite{A}" or
+%% leave the citation to the text. \rowcolor is safe: no \multirow column.
+%% Width: row labels with citations often make the table wider than the line
+%% (house practice: \resizebox{1\textwidth}); \shrinktofit keeps that
+%% behaviour and leaves a narrow table at body-text size.
+%% ------------------------------------------------------------------------
+\begin{table*}[t]
+\centering
+\renewcommand{\arraystretch}{0.9}
+\caption{<Metric>$\uparrow$ of each method on every backbone. The best result per test is \textbf{bold}; the grey ablation row (\ie <X w/o C1>) is not ranked.}
+\vspace{-10pt}
+\shrinktofit{\linewidth}{%
+\begin{tabular}{l|ccccc|c}
+\toprule
+\multicolumn{1}{c|}{\textbf{}} & \multicolumn{5}{c|}{\textbf{<Metric> \% $\uparrow$}} & \textbf{Avg} \\
+\textbf{Model} & \textbf{Test-1} & \textbf{Test-2} & \textbf{Test-3} & \textbf{Test-4} & \textbf{Test-5} & \textbf{<Metric> \% $\uparrow$} \\
+\midrule
+<Backbone-1> & \pend & \pend & \pend & \pend & \pend & \pend \\
+\midrule
+\hspace{0.1em} + Baseline-A (\citeauthor{Placeholder-A}, \citeyear{Placeholder-A}) & \pend & \pend & \pend & \pend & \pend & \pend \\
+\hspace{0.1em} + Baseline-B (\citeauthor{Placeholder-B}, \citeyear{Placeholder-B}) & \pend & \pend & \pend & \pend & \pend & \pend \\
+\midrule
+\hspace{0.1em} \ablation{+ X (w/o C1) (Ablation)} & \ablation{\pend} & \ablation{\pend} & \ablation{\pend} & \ablation{\pend} & \ablation{\pend} & \ablation{\pend} \\
+\rowcolor{oursrowblue}
+\hspace{0.1em} \textbf{+ X (Ours)} & \pend & \pend & \pend & \pend & \pend & \pend \\
+\midrule\midrule
+<Backbone-2> & \pend & \pend & \pend & \pend & \pend & \pend \\
+\midrule
+\hspace{0.1em} + Baseline-A (\citeauthor{Placeholder-A}, \citeyear{Placeholder-A}) & \pend & \pend & \pend & \pend & \pend & \pend \\
+\rowcolor{oursrowblue}
+\hspace{0.1em} \textbf{+ X (Ours)} & \pend & \pend & \pend & \pend & \pend & \pend \\
+\bottomrule
+\end{tabular}}
+\label{tab:per-backbone}
+\vspace{-17pt}
+\end{table*}
+
+\clearpage % harness separator -- do not copy
+
+%% ------------------------------------------------------------------------
+%% T3. Before/after with coloured absolute change  [some; relative % also seen]
+%% Red (+) = gain, blue (-) = drop. Bold = improved over the base model.
+%% ------------------------------------------------------------------------
+\begin{table*}[!t]
+\centering
+\renewcommand{\arraystretch}{0.9}
+\caption{Accuracy \% of each backbone with and without <intervention>. Bold values improve over the base model; superscripts give the absolute change.}
+\shrinktofit{0.7\textwidth}{%
+\begin{tabular}{l|ccc|c}
+\toprule
+ & \textbf{Dataset-1} & \textbf{Dataset-2} & \textbf{Dataset-3} & \textbf{Average} \\
+\midrule
+Model-S    & \pend & \pend & \pend & \pend \\
++ X        & \pend & \pend & \pend & \pend \\
+% filled form: \textbf{71.40}$^{\color{+}+1.15}$ & 38.26$^{\color{+}+0.00}$ & 55.90$^{\color{-}-0.42}$
+\midrule
+Model-L    & \pend & \pend & \pend & \pend \\
++ X        & \pend & \pend & \pend & \pend \\
+\bottomrule
+\end{tabular}}
+\label{tab:before-after}
+\vspace{-15pt}
+\end{table*}
+
+\clearpage % harness separator -- do not copy
+
+%% ------------------------------------------------------------------------
+%% T4. Quality + cost as paired tinted metric rows  [some]
+%% Use when efficiency is a claim; no separate efficiency section. Shade the
+%% METRIC rows (pink = quality, blue = cost, the same hues as the plots), not
+%% an "ours" row, and add no Avg column; the metric label column carries
+%% unit + arrow. Width: 0.93\columnwidth is the two-column ICML value.
+%% ------------------------------------------------------------------------
+\begin{table}[t]
+\centering
+\renewcommand{\arraystretch}{0.9}
+\caption{Quality and cost of each method as the <budget> grows.}
+\makebox[\linewidth][c]{\shrinktofit{\linewidth}{%
+\begin{tabular}{lc|cccc}
+\toprule
+\multicolumn{2}{c|}{} & \multicolumn{4}{c}{\textbf{Budget}} \\
+\textbf{Method} & \textbf{Metric} & \textbf{$1\times$} & \textbf{$2\times$} & \textbf{$4\times$} & \textbf{$8\times$} \\
+\midrule
+\multirow{2}{*}{Baseline}
+ & \cellcolor{qualityrowcolor}\textbf{Quality $\uparrow$} & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend \\
+ & \cellcolor{costrowcolor}\textbf{Cost $\downarrow$} & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend \\
+\cmidrule(lr){1-6}
+\multirow{2}{*}{X}
+ & \cellcolor{qualityrowcolor}\textbf{Quality $\uparrow$} & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend & \cellcolor{qualityrowcolor}\pend \\
+ & \cellcolor{costrowcolor}\textbf{Cost $\downarrow$} & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend & \cellcolor{costrowcolor}\pend \\
+\bottomrule
+\end{tabular}}}
+\label{tab:quality-cost}
+\vspace{-10pt}
+\end{table}
+
+\clearpage % harness separator -- do not copy
+
+%% ------------------------------------------------------------------------
+%% T5. Ablation table  [some]
+%% Appendix form: plain header, generic caption. In the main text prefer a
+%% bar chart [most]; if a table must go there, bold the header.
+%% Include a randomized-signal control ("X (Random signal)") [some].
+%% ------------------------------------------------------------------------
+\begin{table*}[t]
+\centering
+\renewcommand{\arraystretch}{0.9}
+\caption{Ablation of X on Model-L.}
+\shrinktofit{0.8\textwidth}{%
+\begin{tabular}{l|cccc|c}
+\toprule
+ & \multicolumn{4}{c|}{Benchmarks} & \\
+Variant & Bench-1 & Bench-2 & Bench-3 & Bench-4 & Avg. \\
+\midrule
+SFT                                     & \pend & \pend & \pend & \pend & \pend \\
+\hspace{0.1em} + Baseline-A             & \pend & \pend & \pend & \pend & \pend \\
+\midrule
+\hspace{0.1em} + X (w/o C1)             & \pend & \pend & \pend & \pend & \pend \\
+\hspace{0.1em} + X (w/o C2)             & \pend & \pend & \pend & \pend & \pend \\
+\hspace{0.1em} + X (Random signal)      & \pend & \pend & \pend & \pend & \pend \\
+\midrule
+\rowcolor{oursrow}
+\hspace{0.1em} + X                      & \pend & \pend & \pend & \pend & \pend \\
+\bottomrule
+\end{tabular}}
+\label{tab:ablation}
+\vspace{-5pt}
+\end{table*}
+
+\clearpage % harness separator -- do not copy
+
+%% ------------------------------------------------------------------------
+%% T6. Hyperparameter sweep  [some]
+%% End the prose by naming the default and the reason, e.g. "We therefore
+%% set $\alpha$ to <value> by default, since ..." [some].
+%% ------------------------------------------------------------------------
+\begin{table}[t]
+\centering
+\renewcommand{\arraystretch}{0.9}
+\caption{Sensitivity of X to $\alpha$.}
+\shrinktofit{0.5\linewidth}{%
+\begin{tabular}{l|ccccc}
+\toprule
+ & \multicolumn{5}{c}{$\alpha$} \\ \cmidrule(lr){2-6}
+Metric & 0.1 & 0.3 & 0.5 & 0.7 & 0.9 \\
+\midrule
+\multicolumn{6}{l}{\textbf{Model-S}} \\
+Accuracy \% $\uparrow$ & \pend & \pend & \pend & \pend & \pend \\
+Length $\downarrow$    & \pend & \pend & \pend & \pend & \pend \\
+\midrule
+\multicolumn{6}{l}{\textbf{Model-L}} \\
+Accuracy \% $\uparrow$ & \pend & \pend & \pend & \pend & \pend \\
+Length $\downarrow$    & \pend & \pend & \pend & \pend & \pend \\
+\bottomrule
+\end{tabular}}
+\label{tab:sweep}
+\end{table}
+
+\clearpage % harness separator -- do not copy
+
+%% ------------------------------------------------------------------------
+%% T7. Appendix hyperparameters  [some; caption moved ABOVE: fix]
+%% Values are ALSO stated in the Implementation Details prose.
+%% ------------------------------------------------------------------------
+\begin{table}[h]
+\centering
+\caption{Key hyperparameters used to train X.}
+\begin{tabularx}{0.45\linewidth}{l|>{\centering\arraybackslash}X}
+\toprule
+\multicolumn{1}{c}{\textbf{Hyperparameter}} \vline & \multicolumn{1}{c}{\textbf{Value}} \\
+\midrule
+Optimizer              & AdamW \\
+Training dataset       & \pend \\
+Learning rate          & \pend \\
+Batch size             & \pend \\
+Epochs                 & \pend \\
+Warmup steps           & \pend \\
+Max sequence length    & \pend \\
+Samples per input      & \pend \\
+\bottomrule
+\end{tabularx}
+\label{tab:hyper-train}
+\end{table}
+
+\clearpage % harness separator -- do not copy
+
+%% ------------------------------------------------------------------------
+%% T8. Dataset statistics  [older; classic datasets only]
+%% For benchmark suites list #examples and domain in appendix bullets instead.
+%% ------------------------------------------------------------------------
+\begin{table}[t]
+\centering
+\caption{Statistics of the datasets.}
+\shrinktofit{0.55\linewidth}{%
+\begin{tabular}{l|rrr}
+\toprule
+ & Dataset-A & Dataset-B & Dataset-C \\
+\midrule
+\#Train        & \pend & \pend & \pend \\
+\#Validation   & \pend & \pend & \pend \\
+\#Test         & \pend & \pend & \pend \\
+\#Classes      & \pend & \pend & \pend \\
+\bottomrule
+\end{tabular}}
+\label{tab:datasets}
+\end{table}
