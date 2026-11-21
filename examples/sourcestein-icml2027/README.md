@@ -2,7 +2,7 @@
 
 English | [中文](README.zh-CN.md)
 
-With the art-of-writing skill, Claude Opus 5.5 turned one prompt into a typeset ICML 2027 submission in a single run. It chose the idea, wrote the code, downloaded the data, trained two networks, ran the experiments, drew the figures, checked each reference on the web and built the paper. Nobody edited the result.
+With the humanize-ml-paper skill, Claude Opus 5.5 turned one prompt into a typeset ICML 2027 submission in a single run. It chose the idea, wrote the code, downloaded the data, trained two networks, ran the experiments, drew the figures, checked each reference on the web and built the paper. Nobody edited the result.
 
 [**Read the paper (PDF)**](SourceStein.pdf) · [The prompt](prompt.md) · [Source, code and results](source/)
 

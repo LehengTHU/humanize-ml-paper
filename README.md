@@ -1,6 +1,6 @@
-# The Art of Writing
+# humanize-ml-paper
 
-**Agents with well-curated skills can cheat AI detectors.**
+**An agent skill for writing ML conference papers (ICLR, NeurIPS, ICML) in the style of human-written papers.**
 
 English | [中文](README.zh-CN.md)
 
@@ -10,9 +10,9 @@ English | [中文](README.zh-CN.md)
 
 <a href="https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/"><img src="media/demo.gif" width="800" alt="Opening film of the blog post: an agent writes a draft page and revises it with the skill's style sheet"></a>
 
-`art-of-writing` is an agent skill for writing ML conference papers (ICLR, NeurIPS, ICML). We distilled the writing practices of human-written papers that follow academic conventions into a workflow, rules, a phrase bank and checking tools. An agent equipped with the skill can write fluent, logical prose with a lower AI detection rate and can even write a complete conference paper in one run.
+We distilled the writing practices of human-written papers that follow academic conventions into a workflow, rules, a phrase bank and checking tools. An agent equipped with the skill can write fluent, logical prose with a lower AI detection rate and can even write a complete conference paper in one run.
 
-Read the [blog post](https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/) for the full study, or watch the [37-second film](media/demo.mp4).
+The full study is the blog post [The Art of Writing: Agents with Well-Curated Skills Can Cheat AI Detectors](https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/). You can also watch the [37-second film](media/demo.mp4).
 
 ## Results
 
@@ -42,26 +42,26 @@ The skill can also take an agent from an idea to a typeset submission. Given one
 **Claude Code** (plugin marketplace):
 
 ```
-/plugin marketplace add LehengTHU/art-of-writing
-/plugin install art-of-writing@art-of-writing
+/plugin marketplace add LehengTHU/humanize-ml-paper
+/plugin install humanize-ml-paper@humanize-ml-paper
 ```
 
 **Other agents** (Codex, Cursor, Gemini CLI and others that read `SKILL.md`):
 
 ```bash
-npx skills add LehengTHU/art-of-writing
+npx skills add LehengTHU/humanize-ml-paper
 # or, with the GitHub CLI
-gh skill install LehengTHU/art-of-writing art-of-writing
+gh skill install LehengTHU/humanize-ml-paper humanize-ml-paper
 ```
 
 **Manual:**
 
 ```bash
-git clone https://github.com/LehengTHU/art-of-writing
-cp -r art-of-writing/skills/art-of-writing ~/.claude/skills/
+git clone https://github.com/LehengTHU/humanize-ml-paper
+cp -r humanize-ml-paper/skills/humanize-ml-paper ~/.claude/skills/
 ```
 
-The skill needs Python 3.8+ for its checker and a LaTeX engine ([tectonic](https://tectonic-typesetting.github.io) is the smallest) to build papers. After a manual install, `bash ~/.claude/skills/art-of-writing/scripts/check_env.sh` reports anything missing and builds a one-page test PDF. The full setup is in [`skills/art-of-writing/README.md`](skills/art-of-writing/README.md).
+The skill needs Python 3.8+ for its checker and a LaTeX engine ([tectonic](https://tectonic-typesetting.github.io) is the smallest) to build papers. After a manual install, `bash ~/.claude/skills/humanize-ml-paper/scripts/check_env.sh` reports anything missing and builds a one-page test PDF. The full setup is in [`skills/humanize-ml-paper/README.md`](skills/humanize-ml-paper/README.md).
 
 ## Usage
 
@@ -73,7 +73,7 @@ Ask in plain language; the skill triggers on paper-writing tasks. For example:
 - "Plan the page budget for an ICML submission and tell me what goes to the appendix."
 - "Review my draft against the style checklist."
 
-The checker also runs on its own: `python3 skills/art-of-writing/scripts/check_paper.py <paper_dir> --stage submission`.
+The checker also runs on its own: `python3 skills/humanize-ml-paper/scripts/check_paper.py <paper_dir> --stage submission`.
 
 ## What is inside
 

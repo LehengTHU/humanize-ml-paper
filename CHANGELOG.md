@@ -1,8 +1,10 @@
 # Changelog
 
-## Unreleased
+## v1.1.0 (2026-11-21)
 
+- Renamed from `art-of-writing` to `humanize-ml-paper`: the repository, the skill and the Claude Code plugin. Install with the new name; GitHub redirects the old repository URL.
 - `examples/sourcestein-icml2027/`: the one-shot ICML paper from the blog post, with its prompt, source, code and results.
+- The README states the scope of the detection results: the texts that pass are mostly short ones written from a human draft.
 
 ## v1.0.0 (2026-11-21)
 

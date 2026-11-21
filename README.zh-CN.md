@@ -1,6 +1,6 @@
-# 写作的艺术
+# humanize-ml-paper
 
-**装备精心设计的 skill，写作智能体能骗过 AI 检测。**
+**一个写 ML 会议论文（ICLR、NeurIPS、ICML）的 agent skill，按人类规范论文的写法写作。**
 
 [English](README.md) | 中文
 
@@ -10,9 +10,9 @@
 
 <a href="https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/"><img src="media/demo.gif" width="800" alt="博客开场影片：智能体写出一页草稿，再按 skill 的风格手册改稿"></a>
 
-`art-of-writing` 是一个写 ML 会议论文（ICLR、NeurIPS、ICML）的 agent skill。我们从人类撰写的规范论文中提炼写法，做成了流程、规则、短语库和检查工具。装备该 skill 的智能体能写出流畅有逻辑的文字，且能降低 AI 检测率，甚至能一次写完一篇会议论文。
+我们从人类撰写的规范论文中提炼写法，做成了流程、规则、短语库和检查工具。装备该 skill 的智能体能写出流畅有逻辑的文字，且能降低 AI 检测率，甚至能一次写完一篇会议论文。
 
-完整研究见[博客](https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/)，也可以看 [37 秒的开场影片](media/demo.mp4)。
+完整研究见博客[《写作的艺术：装备精心设计的 skill，写作智能体能骗过 AI 检测》](https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/)，也可以看 [37 秒的开场影片](media/demo.mp4)。
 
 ## 结果
 
@@ -42,26 +42,26 @@ Skill 还能带着智能体把一个想法写成排好版的投稿。装备 skil
 **Claude Code**（插件市场）：
 
 ```
-/plugin marketplace add LehengTHU/art-of-writing
-/plugin install art-of-writing@art-of-writing
+/plugin marketplace add LehengTHU/humanize-ml-paper
+/plugin install humanize-ml-paper@humanize-ml-paper
 ```
 
 **其他智能体**（Codex、Cursor、Gemini CLI 等读取 `SKILL.md` 的工具）：
 
 ```bash
-npx skills add LehengTHU/art-of-writing
+npx skills add LehengTHU/humanize-ml-paper
 # 或者用 GitHub CLI
-gh skill install LehengTHU/art-of-writing art-of-writing
+gh skill install LehengTHU/humanize-ml-paper humanize-ml-paper
 ```
 
 **手动安装：**
 
 ```bash
-git clone https://github.com/LehengTHU/art-of-writing
-cp -r art-of-writing/skills/art-of-writing ~/.claude/skills/
+git clone https://github.com/LehengTHU/humanize-ml-paper
+cp -r humanize-ml-paper/skills/humanize-ml-paper ~/.claude/skills/
 ```
 
-检查器需要 Python 3.8+，编译论文需要一个 LaTeX 引擎（[tectonic](https://tectonic-typesetting.github.io) 体积最小）。手动安装后，运行 `bash ~/.claude/skills/art-of-writing/scripts/check_env.sh` 会列出缺少的依赖，并编译一页测试 PDF。完整的环境配置见 [`skills/art-of-writing/README.md`](skills/art-of-writing/README.md)。
+检查器需要 Python 3.8+，编译论文需要一个 LaTeX 引擎（[tectonic](https://tectonic-typesetting.github.io) 体积最小）。手动安装后，运行 `bash ~/.claude/skills/humanize-ml-paper/scripts/check_env.sh` 会列出缺少的依赖，并编译一页测试 PDF。完整的环境配置见 [`skills/humanize-ml-paper/README.md`](skills/humanize-ml-paper/README.md)。
 
 ## 用法
 
@@ -73,7 +73,7 @@ cp -r art-of-writing/skills/art-of-writing ~/.claude/skills/
 - “规划一篇 ICML 投稿的页数预算，告诉我哪些内容放附录。”
 - “对照风格检查表审一遍我的草稿。”
 
-检查器也可以单独运行：`python3 skills/art-of-writing/scripts/check_paper.py <论文目录> --stage submission`。
+检查器也可以单独运行：`python3 skills/humanize-ml-paper/scripts/check_paper.py <论文目录> --stage submission`。
 
 ## 包含什么
 

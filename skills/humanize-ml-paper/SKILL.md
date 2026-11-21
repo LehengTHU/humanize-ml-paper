@@ -1,11 +1,11 @@
 ---
-name: art-of-writing
+name: humanize-ml-paper
 description: Write or revise a full ML conference paper (ICLR, NeurIPS, ICML) in one consistent house style for ML conference papers, distilled from a set of published papers. Use when turning a research proposal, method notes or experiment results into a complete LaTeX paper; when drafting or rewriting any section (abstract, introduction, preliminary, methodology, experiments, limitations, conclusion, appendix, related works) in this house style; when planning page budgets or main-text vs appendix allocation; when building result tables (including empty placeholder tables before data exists), figures, captions or algorithm blocks; when re-targeting a paper to another venue (one-column vs two-column ICML); or when self-reviewing a draft against these conventions. Covers workflow/agentic methods, theory-grounded or closed-form methods, loss design, reward design for RL, and findings papers. Not for generic writing advice outside this house style.
 license: MIT
 metadata:
   author: Leheng Sheng
-  version: "1.0.0"
-  repository: https://github.com/LehengTHU/art-of-writing
+  version: "1.1.0"
+  repository: https://github.com/LehengTHU/humanize-ml-paper
 ---
 
 # ML conference paper style

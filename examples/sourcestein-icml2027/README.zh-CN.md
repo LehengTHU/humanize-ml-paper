@@ -2,7 +2,7 @@
 
 [English](README.md) | 中文
 
-装备 art-of-writing skill 的 Claude Opus 5.5 只凭一段提示词，一次运行就写成了一篇排好版的 ICML 2027 投稿。它自己选定想法、写代码、下载数据、训练两个网络、跑实验、画图、上网逐条核对参考文献，最后编译出论文，全程没有人工修改。
+装备 humanize-ml-paper skill 的 Claude Opus 5.5 只凭一段提示词，一次运行就写成了一篇排好版的 ICML 2027 投稿。它自己选定想法、写代码、下载数据、训练两个网络、跑实验、画图、上网逐条核对参考文献，最后编译出论文，全程没有人工修改。
 
 [**阅读论文（PDF）**](SourceStein.pdf) · [提示词](prompt.md) · [源码、代码和实验结果](source/)
 

@@ -1,4 +1,4 @@
-# art-of-writing
+# humanize-ml-paper
 
 A Claude Code skill for writing and revising ML conference papers (ICLR, NeurIPS, ICML) in one consistent house style. The style was distilled from a set of published conference papers: the section skeleton, paragraph templates, transitions, notation, experiment write-up, figure palette, table layout and LaTeX project layout. Each rule carries an evidence label (`[all]`, `[most]`, `[some]`, `[current]`, `[venue: X]`, ...) that says how strongly the source papers support it. Every example, figure and table in the skill is synthetic.
 
@@ -7,7 +7,7 @@ A Claude Code skill for writing and revising ML conference papers (ICLR, NeurIPS
 Install it as described in the [repository README](../../README.md#install), or copy this folder into your Claude Code skills directory:
 
 ```bash
-cp -r skills/art-of-writing ~/.claude/skills/
+cp -r skills/humanize-ml-paper ~/.claude/skills/
 ```
 
 Claude Code picks the skill up on the next start. It triggers when you ask for a full paper, a section, a result table, a figure, a page-budget plan, a venue switch or a self-review. You can also invoke it by name.
@@ -17,7 +17,7 @@ Claude Code picks the skill up on the next start. It triggers when you ask for a
 Run the self-check first. It tells you what is missing and prints the install command for your system, then builds a one-page test PDF:
 
 ```bash
-bash ~/.claude/skills/art-of-writing/scripts/check_env.sh
+bash ~/.claude/skills/humanize-ml-paper/scripts/check_env.sh
 ```
 
 ### 1. A LaTeX engine (required to build the paper)

@@ -1,13 +1,13 @@
 {
-  "name": "art-of-writing",
+  "name": "humanize-ml-paper",
   "description": "Write or revise ML conference papers (ICLR, NeurIPS, ICML) in the style of human-written papers that follow academic conventions: workflow, rules, phrase bank, LaTeX templates and a draft checker.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Leheng Sheng",
     "url": "https://github.com/LehengTHU"
   },
   "homepage": "https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/",
-  "repository": "https://github.com/LehengTHU/art-of-writing",
+  "repository": "https://github.com/LehengTHU/humanize-ml-paper",
   "license": "MIT",
   "keywords": ["academic-writing", "paper-writing", "latex", "iclr", "neurips", "icml", "agent-skills"]
 }
