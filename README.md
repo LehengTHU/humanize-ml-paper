@@ -6,7 +6,7 @@ English | [中文](README.zh-CN.md)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-SKILL.md-2A4E8F)](https://agentskills.io)
-[![Blog post](https://img.shields.io/badge/Blog-The%20Art%20of%20Writing-B8322A)](https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/)
+[![Blog post](https://img.shields.io/badge/Blog-The%20Art%20of%20Writing-2A4E8F)](https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/)
 
 <a href="https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/"><img src="media/demo.gif" width="800" alt="Opening film of the blog post: an agent writes a draft page and revises it with the skill's style sheet"></a>
 

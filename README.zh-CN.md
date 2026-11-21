@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-SKILL.md-2A4E8F)](https://agentskills.io)
-[![Blog post](https://img.shields.io/badge/Blog-%E5%86%99%E4%BD%9C%E7%9A%84%E8%89%BA%E6%9C%AF-B8322A)](https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/)
+[![Blog post](https://img.shields.io/badge/Blog-%E5%86%99%E4%BD%9C%E7%9A%84%E8%89%BA%E6%9C%AF-2A4E8F)](https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/)
 
 <a href="https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/"><img src="media/demo.gif" width="800" alt="博客开场影片：智能体写出一页草稿，再按 skill 的风格手册改稿"></a>
 
