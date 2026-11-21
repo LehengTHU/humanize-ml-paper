@@ -1,0 +1,146 @@
+%% example_paper.tex -- ICML 2027 submission (blind), house project layout.
+%% Venue facts (fetched 2026-11-14 from icml.cc/Conferences/2027/CallForPapers, /AuthorInstructions,
+%% /UseOfGenerativeAIByAuthors and media.icml.cc/Conferences/ICML2027/styles/icml2027.zip):
+%%   - main body at most 8 pages at submission (9 at camera-ready); references, Impact Statement and
+%%     appendices unlimited, in the same single PDF; over 8 pages = automatic rejection.
+%%   - Impact Statement REQUIRED (unnumbered, end of paper, before the references).
+%%   - AI Disclosure Statement REQUIRED for all submissions (not counted; kit example names it
+%%     "AI Use Statement", placed before the Impact Statement).
+%%   - double-blind: no author names, acknowledgements or public code links; PDF <= 50 MB.
+%%   - icml2027.sty is identical to icml2026.sty apart from the year (verified with diff).
+%% Build: tectonic -X compile --keep-intermediates example_paper.tex
+\documentclass{article}
+\PassOptionsToPackage{table}{xcolor}   % BEFORE icml2026: loading [table]{xcolor}
+                                       % after the style is an "Option clash"
+                                       % (verified with tectonic)
+\usepackage[T1]{fontenc}               % XeTeX/tectonic: without T1 the style's
+                                       % Times (ptm) has no TU shape and the whole
+                                       % paper silently falls back to Latin Modern
+                                       % (log: "Font shape TU/ptm/m/n undefined";
+                                       % the running head then reads
+                                       % "Title Suppressed Due to Excessive Size")
+
+% --- Official ICML header (template order) --------------------------------
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\newcommand{\theHalgorithm}{\arabic{algorithm}}   % hyperref + algorithm (template)
+
+% Initial blind submission (anonymous; grey line-number ruler in the left margin):
+\usepackage{icml2027}
+% Preprint (authors shown, "Preprint. <date>" footer, no ruler):
+% \usepackage[preprint]{icml2027}
+% Camera-ready (authors, PMLR notice, no ruler; +1 page):
+% \usepackage[accepted]{icml2027}
+
+% Do NOT load the template's cleveref / todonotes / theorem block: house style
+% never uses cleveref and preamble.tex defines the theorem set (to follow the
+% kit's preferred shared theorem counter instead, see references/venues.md
+% section 3.4). Everything else is the shared preamble.
+\input{preamble}
+
+% ---- Concept table (references/concepts.md) and term table (section 3); quotes copied from the cited papers.
+% concept: test-time normalization | framing | borrowed: AlphaBN "In this paper, we call it as test-time normalization." | replacing BN statistics at test time
+% concept: covariate shift | framing | borrowed: BN-Adapt "Improving robustness against common corruptions by covariate shift adaptation" | input distribution differs between training and test
+% concept: James--Stein estimator | framing | borrowed: JS-Norm "we introduce a novel method to employ the James-Stein estimator" | shrinks a sample mean toward a fixed point
+% concept: source statistics | core | borrowed: BN-Adapt "relying on the source statistics (large N)" | running BN mean and variance from training
+% concept: test batch statistics | core | borrowed: UnMix-TNS "utilize test batch statistics for standardization" | mean and variance of the current test batch
+% concept: mixing weight | core | composed: mixing (AlphaBN "mixing up the source and target statistics") + weight (plain) | lambda in mu^src + lambda (hat mu - mu^src)
+% concept: shift bias | core | composed: shift (BN-Adapt "covariate shift adaptation") + bias (Stein-BN-Adv "leads to a biased estimate, but with smaller variance") | error from keeping source statistics when the test data moved
+% concept: estimation variance | core | composed: estimation (BN-Adapt "biased estimates of the target statistics") + variance (Stein-BN-Adv "but with smaller variance") | error from estimating statistics from few test samples
+% term: TBN | borrowed: UnMix-TNS "test-time BN (TBN) employs the current batch's statistics" | normalize with test batch statistics only | other senses: none
+% term: Prior-BN | composed: prior (BN-Adapt "already computed on the training dataset as a prior") + BN (plain) | the N/(N+n) mixing rule | other senses: none
+% term: pseudo sample size | borrowed: BN-Adapt "has the intuitive interpretation of a pseudo sample size" | the N of Prior-BN | other senses: none
+% term: alpha-BN | borrowed: AlphaBN "a general formulation α-BN to calibrate the batch statistics" | fixed mixing of source and target statistics | other senses: none
+% term: common corruptions | borrowed: CIFAR10-C "Benchmarking neural network robustness to common corruptions and perturbations" | the CIFAR-10-C shifts | other senses: none
+% term: fully test-time adaptation | borrowed: TENT "Tent: Fully Test-time Adaptation by Entropy Minimization" | adapting without source data or labels | other senses: none
+% term: entropy minimization | borrowed: TENT "Fully Test-time Adaptation by Entropy Minimization" | TENT's objective | other senses: none
+% term: Stein weight | composed: Stein (James-Stein "Estimation with Quadratic Loss") + weight (plain) | the positive-part James-Stein factor used as mixing weight | other senses: none
+% term: shift score | coined | whitened squared distance S between batch and source means | other senses: none
+% term: SourceStein | coined | the method name | other senses: none
+% epithet: adaptive and stable
+\showconceptsfalse      % submitted PDF: black text
+
+% Rejected titles:
+% \icmltitle{Stein Shrinkage for Small-Batch Test-Time Normalization}
+% \icmltitle{How Much to Trust a Test Batch: James--Stein Mixing of Normalization Statistics}
+% Short running head; needed whenever the title runs over one line.
+% Keep this paper's rejected titles commented here [some].
+\icmltitlerunning{SourceStein: Stein Shrinkage of Test-Time Normalization Statistics}
+
+\begin{document}
+
+\twocolumn[
+  % "<Hook>: \\ <Descriptive Subtitle>" [some] or "Verb-ing <Object> with <Key
+  % Ingredient>" [most]. Content words capitalized (ICML rule).
+  \icmltitle{SourceStein: Shrinking Test-Time Normalization Statistics \\ toward the Source in Closed Form}
+
+  % Author block is typed in full even for submission: icml2026.sty hides it
+  % unless [accepted] or [preprint] is given (template comment).
+  \icmlsetsymbol{equal}{*}
+
+  \begin{icmlauthorlist}
+    \icmlauthor{Anonymous Author 1}{aff1}
+    \icmlauthor{Anonymous Author 2}{aff2}
+    \icmlauthor{Anonymous Author 3}{aff1}
+    % Break a long list with "\\" after the fifth author.
+  \end{icmlauthorlist}
+
+  \icmlaffiliation{aff1}{Anonymous Institution}
+  \icmlaffiliation{aff2}{Anonymous Institution}
+
+  \icmlcorrespondingauthor{Anonymous Author 1}{anonymous@example.com}
+
+  \icmlkeywords{Test-Time Adaptation, Batch Normalization, Covariate Shift, James-Stein Estimator}
+
+  \vskip 0.3in
+]
+
+% REQUIRED even when empty (official template). Equal contribution:
+% \printAffiliationsAndNotice{\icmlEqualContribution}
+\printAffiliationsAndNotice{}
+\suppressfloats[t]   % [skill choice]: with a short abstract a [t] teaser floats
+                     % to the top of the LEFT column, above the abstract (seen in
+                     % this skeleton's first build). This keeps column 1 free so
+                     % the teaser lands atop column 2 of p1, next to the abstract.
+                     % Delete once the real abstract and intro fill column 1.
+
+\input{chapters/1_abstract}
+\input{chapters/2_introduction}
+\input{chapters/3_preliminary}
+\input{chapters/4_methodology}
+\input{chapters/5_experiments}
+\input{chapters/6_conclusion}         % Limitations + Conclusion; \label{main-text-end}
+
+% --- Not counted toward the page limit (ICML 2026 CFP) ---------------------
+\clearpage                            % statements start a fresh page, so the
+                                      % main body visibly ends on p8 (p9 CR)
+\section*{AI Disclosure Statement}
+% Required by ICML 2027 (CFP "Use of Generative AI by Authors & Disclosure Policy"); kit heading: AI Use Statement.
+This submission was produced with substantive use of a generative AI agent (a large language model with code-execution tools).
+The agent proposed the research idea, wrote the experimental code, ran all experiments, analysed the results, drew the figures and tables, searched and checked the literature, and drafted the manuscript.
+Each number in the paper is read from the raw output files of the released code, and each reference was compared with its arXiv or publisher record.
+The authors are responsible for reviewing all AI-generated content, including code, results, mathematical claims and citations, and take full responsibility for the paper.
+
+\section*{Impact Statement}
+% Mandatory for the main track (ICML 2027 CFP "Impact Statements"); house three-sentence pattern.
+This work aims to make test-time normalization of deployed image classifiers more adaptive and stable when only a few test inputs arrive at a time, which can help applications such as on-device perception under changing sensors or weather.
+We expect its main societal effect to be positive, since a model that degrades less under distribution shift makes fewer silent errors.
+One risk is that a lower error under synthetic corruptions may be read as robustness to all real-world shifts, which our experiments do not establish.
+
+% Camera-ready only (never at submission: CFP / Author Instructions forbid
+% acknowledgements and grant numbers in the blind version):
+% \section*{Acknowledgements}
+% This research is supported by <grant> (<number>).
+
+\bibliography{example_paper}
+\bibliographystyle{icml2027}
+
+\input{chapters/7_appendix}           % \newpage \appendix \onecolumn
+\input{chapters/8_appendix}           % A Related Works, then every appendix section
+                                      % (one file named after its content,
+                                      % latex_source.md section 11)
+
+\end{document}

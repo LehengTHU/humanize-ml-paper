@@ -1,0 +1,2 @@
+data/c10c/gaussian_noise_s3.u8 True
+data/c10c/gaussian_noise_s5.u8 True

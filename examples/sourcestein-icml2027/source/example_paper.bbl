@@ -1,0 +1,118 @@
+\begin{thebibliography}{19}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Efron \& Morris(1973)Efron and Morris]{Efron-Morris}
+Efron, B. and Morris, C.
+\newblock {Stein's} estimation rule and its competitors -- an empirical {Bayes}
+  approach.
+\newblock \emph{Journal of the American Statistical Association}, 68\penalty0
+  (341):\penalty0 117--130, 1973.
+
+\bibitem[Gong et~al.(2022)Gong, Jeong, Kim, Kim, Shin, and Lee]{NOTE}
+Gong, T., Jeong, J., Kim, T., Kim, Y., Shin, J., and Lee, S.-J.
+\newblock {NOTE}: Robust continual test-time adaptation against temporal
+  correlation.
+\newblock In \emph{NeurIPS}, 2022.
+
+\bibitem[He et~al.(2016)He, Zhang, Ren, and Sun]{ResNet}
+He, K., Zhang, X., Ren, S., and Sun, J.
+\newblock Deep residual learning for image recognition.
+\newblock In \emph{{CVPR}}, 2016.
+
+\bibitem[Hendrycks \& Dietterich(2019)Hendrycks and Dietterich]{CIFAR10-C}
+Hendrycks, D. and Dietterich, T.~G.
+\newblock Benchmarking neural network robustness to common corruptions and
+  perturbations.
+\newblock In \emph{{ICLR}}, 2019.
+
+\bibitem[Ioffe \& Szegedy(2015)Ioffe and Szegedy]{BatchNorm}
+Ioffe, S. and Szegedy, C.
+\newblock Batch normalization: Accelerating deep network training by reducing
+  internal covariate shift.
+\newblock In \emph{{ICML}}, 2015.
+
+\bibitem[Ivolgina et~al.(2025)Ivolgina, Fletcher, and Vemuri]{Stein-BN-Adv}
+Ivolgina, S., Fletcher, P.~T., and Vemuri, B.~C.
+\newblock Admissibility of {Stein} shrinkage for batch normalization in the
+  presence of adversarial attacks.
+\newblock \emph{CoRR}, abs/2507.08261, 2025.
+
+\bibitem[James \& Stein(1961)James and Stein]{James-Stein}
+James, W. and Stein, C.
+\newblock Estimation with quadratic loss.
+\newblock In \emph{Proceedings of the Fourth Berkeley Symposium on Mathematical
+  Statistics and Probability}, pp.\  361--379, 1961.
+
+\bibitem[Khoshsirat \& Kambhamettu(2023)Khoshsirat and Kambhamettu]{JS-Norm}
+Khoshsirat, S. and Kambhamettu, C.
+\newblock Improving normalization with the {James-Stein} estimator.
+\newblock \emph{CoRR}, abs/2312.00313, 2023.
+
+\bibitem[Li et~al.(2016)Li, Wang, Shi, Liu, and Hou]{AdaBN}
+Li, Y., Wang, N., Shi, J., Liu, J., and Hou, X.
+\newblock Revisiting batch normalization for practical domain adaptation.
+\newblock \emph{CoRR}, abs/1603.04779, 2016.
+
+\bibitem[Lim et~al.(2023)Lim, Kim, Choo, and Choi]{TTN}
+Lim, H., Kim, B., Choo, J., and Choi, S.
+\newblock {TTN}: A domain-shift aware batch normalization in test-time
+  adaptation.
+\newblock In \emph{{ICLR}}, 2023.
+
+\bibitem[Mirza et~al.(2022)Mirza, Micorek, Possegger, and Bischof]{DUA}
+Mirza, M.~J., Micorek, J., Possegger, H., and Bischof, H.
+\newblock The norm must go on: Dynamic unsupervised domain adaptation by
+  normalization.
+\newblock In \emph{{CVPR}}, 2022.
+
+\bibitem[Nado et~al.(2020)Nado, Padhy, Sculley, D'Amour, Lakshminarayanan, and
+  Snoek]{PredictionBN}
+Nado, Z., Padhy, S., Sculley, D., D'Amour, A., Lakshminarayanan, B., and Snoek,
+  J.
+\newblock Evaluating prediction-time batch normalization for robustness under
+  covariate shift.
+\newblock \emph{CoRR}, abs/2006.10963, 2020.
+
+\bibitem[Niu et~al.(2023)Niu, Wu, Zhang, Wen, Chen, Zhao, and Tan]{SAR}
+Niu, S., Wu, J., Zhang, Y., Wen, Z., Chen, Y., Zhao, P., and Tan, M.
+\newblock Towards stable test-time adaptation in dynamic wild world.
+\newblock In \emph{{ICLR}}, 2023.
+
+\bibitem[Schneider et~al.(2020)Schneider, Rusak, Eck, Bringmann, Brendel, and
+  Bethge]{BN-Adapt}
+Schneider, S., Rusak, E., Eck, L., Bringmann, O., Brendel, W., and Bethge, M.
+\newblock Improving robustness against common corruptions by covariate shift
+  adaptation.
+\newblock In \emph{NeurIPS}, 2020.
+
+\bibitem[Simonyan \& Zisserman(2015)Simonyan and Zisserman]{VGG}
+Simonyan, K. and Zisserman, A.
+\newblock Very deep convolutional networks for large-scale image recognition.
+\newblock In \emph{{ICLR}}, 2015.
+
+\bibitem[Tomar et~al.(2024)Tomar, Vray, Thiran, and Bozorgtabar]{UnMix-TNS}
+Tomar, D., Vray, G., Thiran, J.-P., and Bozorgtabar, B.
+\newblock Un-mixing test-time normalization statistics: Combatting label
+  temporal correlation.
+\newblock In \emph{{ICLR}}, 2024.
+
+\bibitem[Wang et~al.(2021)Wang, Shelhamer, Liu, Olshausen, and Darrell]{TENT}
+Wang, D., Shelhamer, E., Liu, S., Olshausen, B.~A., and Darrell, T.
+\newblock Tent: Fully test-time adaptation by entropy minimization.
+\newblock In \emph{{ICLR}}, 2021.
+
+\bibitem[You et~al.(2021)You, Li, and Zhao]{AlphaBN}
+You, F., Li, J., and Zhao, Z.
+\newblock Test-time batch statistics calibration for covariate shift.
+\newblock \emph{CoRR}, abs/2110.04065, 2021.
+
+\bibitem[Zhao et~al.(2023)Zhao, Chen, and Xia]{DELTA}
+Zhao, B., Chen, C., and Xia, S.-T.
+\newblock {DELTA}: Degradation-free fully test-time adaptation.
+\newblock In \emph{{ICLR}}, 2023.
+
+\end{thebibliography}

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- `examples/sourcestein-icml2027/`: the one-shot ICML paper from the blog post, with its prompt, source, code and results.
+
 ## v1.0.0 (2026-11-21)
 
 First public release, the version used in the blog post [The Art of Writing](https://lehengthu.github.io/blog/2026/paper-skill-ai-detection/).

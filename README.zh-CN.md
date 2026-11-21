@@ -23,6 +23,16 @@
 - **一段提示词，一篇完整论文。**智能体只凭一段提示词，自己选定想法、跑实验，约 82 分钟独立写成一篇排好版的 ICML 2027 投稿。
 - **Skill 代替不了人的思考。**如果内容本身就是 AI 生成的，用 AI 改也纠正不过来：只给题目写成的论文仍是 100% AI。一次完整生成的论文尽管读起来像人写的，但因为篇幅过长，仍然会被判为 AI。
 
+## 高级用法：一段提示词，一篇完整论文
+
+Skill 还能带着智能体把一个想法写成排好版的投稿。装备 skill 的 Claude Opus 5.5 只凭一段提示词，一次运行就写成了 14 页的 ICML 2027 投稿 [SourceStein](examples/sourcestein-icml2027/README.zh-CN.md)：共 209 轮、约 82 分钟，其中约 37 分钟是它在一台只有 CPU 的 Mac 上自己跑的实验，全程没有人工修改。
+
+<a href="examples/sourcestein-icml2027/README.zh-CN.md"><img src="examples/sourcestein-icml2027/preview/pages.jpg" alt="一次运行写成的论文 SourceStein 全部 14 页"></a>
+
+[阅读论文](examples/sourcestein-icml2027/SourceStein.pdf) · [提示词](examples/sourcestein-icml2027/prompt.md) · [源码、代码和实验结果](examples/sourcestein-icml2027/source/)
+
+**风险提示：**对于一次完整的生成，尽管写出来像是人类写的，但因为篇幅过长，仍然会被判为 AI。
+
 ## 安装
 
 **Claude Code**（插件市场）：

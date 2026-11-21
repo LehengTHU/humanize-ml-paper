@@ -1,0 +1,8 @@
+105 of 105 chunks
+brightness_s5.u8 True
+contrast_s5.u8 True
+frost_s5.u8 True
+glass_blur_s5.u8 True
+shot_noise_s3.u8 True
+snow_s3.u8 True
+zoom_blur_s3.u8 True

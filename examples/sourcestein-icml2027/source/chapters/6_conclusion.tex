@@ -1,0 +1,12 @@
+\section{Limitations} \label{sec:limitations}
+This work still has a few limitations.
+On the one hand, the guarantee of Proposition~\ref{prop:risk} assumes Gaussian batch means with a noise level measured on source data, and Oracle-$N$ remains lower at batch size one.
+On the other hand, we evaluate two small networks on synthetic corruptions, and whether the rule helps on larger models, natural shifts or non-i.i.d.\ streams is still unknown.
+
+\section{Conclusion} \label{sec:conclusion}
+Test-time normalization methods mix source statistics and test batch statistics with a mixing weight fixed in advance, which leaves stale source statistics under large shifts and noisy batch statistics under small batches.
+To address both, this work presented SourceStein, an adaptive and stable rule that sets the weight of each layer from the batch by James--Stein shrinkage toward the source statistics.
+We showed that, under a Gaussian model, its risk never exceeded that of the batch statistics and remained close to the best fixed weight, balancing the shift bias and the estimation variance.
+Experiments on common corruptions showed that SourceStein generally reduced the error of prior mixing rules for small batches while matching them for large ones.
+We will further explore shrinkage targets that combine the source statistics with earlier test batches.
+\label{main-text-end}

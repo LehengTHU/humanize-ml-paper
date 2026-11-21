@@ -1,0 +1,55 @@
+<paper>/code/tta.py:69: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.last_lam = (float(lam_m.mean()), float(lam_u.mean()))
+<paper>/code/tta.py:69: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.last_lam = (float(lam_m.mean()), float(lam_u.mean()))
+<paper>/code/tta.py:69: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.last_lam = (float(lam_m.mean()), float(lam_u.mean()))
+<paper>/code/tta.py:69: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.last_lam = (float(lam_m.mean()), float(lam_u.mean()))
+<paper>/code/tta.py:69: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.last_lam = (float(lam_m.mean()), float(lam_u.mean()))
+<paper>/code/tta.py:69: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.last_lam = (float(lam_m.mean()), float(lam_u.mean()))
+<paper>/code/tta.py:69: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.last_lam = (float(lam_m.mean()), float(lam_u.mean()))
+<paper>/code/tta.py:69: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.last_lam = (float(lam_m.mean()), float(lam_u.mean()))
+<paper>/code/tta.py:69: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.last_lam = (float(lam_m.mean()), float(lam_u.mean()))
+<paper>/code/tta.py:69: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.last_lam = (float(lam_m.mean()), float(lam_u.mean()))
+<paper>/code/tta.py:69: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.last_lam = (float(lam_m.mean()), float(lam_u.mean()))
+<paper>/code/tta.py:69: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.last_lam = (float(lam_m.mean()), float(lam_u.mean()))
+<paper>/code/tta.py:69: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.last_lam = (float(lam_m.mean()), float(lam_u.mean()))
+impulse_noise 144s
+contrast 145s
+brightness 145s
+defocus_blur 145s
+gaussian_noise 145s
+fog 147s
+snow 147s
+frost 148s
+shot_noise 148s
+zoom_blur 148s
+glass_blur 148s
+elastic_transform 148s
+motion_blur 149s
+pixelate 220s
+jpeg_compression 220s
+.venv/bin/python code/tent_eval.py cnn8 13  1490.86s user 89.35s system 714% cpu 3:41.05 total

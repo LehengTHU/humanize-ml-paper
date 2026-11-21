@@ -1,0 +1,309 @@
+%% =====================================================================
+%% preamble.tex -- shared preamble in the house style ("Part B").
+%% \input this file AFTER the venue header ("Part A", see VENUE NOTES and
+%% main_skeleton.tex). It consolidates the packages, macros, colours and boxes
+%% the house style uses at all three venues; rationale in
+%% references/figures_tables.md and references/math.md.
+%% Evidence labels in the comments ([all], [most], [some], [current], [older],
+%% [venue: X], [fix], [skill choice]) are explained in SKILL.md.
+%% Tested: tectonic -X compile (XeTeX) with iclr2027_conference.sty, with
+%% neurips_2026.sty ([main]) and with icml2026.sty (main_skeleton_icml.tex).
+%% =====================================================================
+%%
+%% VENUE NOTES -- keep exactly ONE header in the main file.
+%%
+%% (A1) ICLR 2027  [default]
+%%   \documentclass{article}
+%%   \PassOptionsToPackage{table}{xcolor}   % BEFORE the style: eso-pic loads xcolor
+%%   \usepackage{iclr2027_conference,times}
+%%   \input{math_commands.tex}              % official file; it redefines \eqref,
+%%                                          % so write \Eqref{eq:x}, never "Equation \eqref"
+%%   \newcommand{\VenueLinks}{\hypersetup{colorlinks=true, linkcolor=red,
+%%       filecolor=magenta, urlcolor=cyan, citecolor=cyan}}      % house colours
+%%   % \iclrfinalcopy                       % camera-ready only
+%%   Cite with \citep{} only ([venue: ICLR]; \citet never).
+%%   \bibliographystyle{iclr2027_conference}
+%%   Limit: 9 pp at submission / 10 at rebuttal and camera-ready (ICLR 2026 and
+%%   2027, verified 2026-09-25). Before the references: \section*{AI Use
+%%   Statement} (2027: REQUIRED), \section*{Ethics Statement} and
+%%   \section*{Reproducibility Statement} (chapters/8_...statement.tex). 2026-style
+%%   kits put "Use of LLMs" last in the appendix instead.
+%%   Pasting this Part B at the end of math_commands.tex is the usual ICLR move
+%%   ([venue: ICLR]); \input{preamble} after math_commands.tex is equivalent.
+%%
+%% (A2) NeurIPS 2026
+%%   \documentclass{article}
+%%   \PassOptionsToPackage{table}{xcolor}
+%%   \PassOptionsToPackage{numbers, compress}{natbib}
+%%   \usepackage[main]{neurips_2026}        % camera-ready: [main,final]
+%%                                          % ([final] alone stops at \@trackname)
+%%   \newcommand{\VenueLinks}{\hypersetup{colorlinks, linkcolor=red,
+%%       anchorcolor=blue, citecolor=green}}
+%%   Cite with \cite{} (numeric). \bibliographystyle{unsrtnat}.
+%%   After the appendix: \clearpage \input{checklist}. 9 content pages.
+%%
+%% (A3) ICML 2026  [full main file: main_skeleton_icml.tex]
+%%   \documentclass{article}
+%%   \PassOptionsToPackage{table}{xcolor}   % prevents "Option clash for package
+%%                                          % xcolor" when [table]{xcolor} follows the sty
+%%   \usepackage[T1]{fontenc}               % B1 loads it too; without T1, XeTeX
+%%                                          % silently falls back to Latin Modern
+%%   \usepackage{microtype}\usepackage{graphicx}\usepackage{subcaption}
+%%   \usepackage{booktabs}\usepackage{hyperref}
+%%   \newcommand{\theHalgorithm}{\arabic{algorithm}}
+%%   \usepackage{icml2026}                  % blind submission (line-number ruler);
+%%                                          % [preprint] arXiv; [accepted] camera-ready
+%%   \icmltitlerunning{Short Running Title}
+%%   After the \twocolumn[...] title block ALWAYS call \printAffiliationsAndNotice{}
+%%   (official template); without it icml2026.sty's end-of-document warning fails
+%%   with "Unbalanced write command" (verified). Only [accepted] needs CM italic 9pt
+%%   (cmti9); if tectonic times out fetching it, use scripts/tectonic_fetch.sh and
+%%   -Z search-path=<dir> (references/venues.md section 2.3).
+%%   No \VenueLinks (keep the template's dark-blue links). \cite{} is fine: the sty
+%%   maps it to \citep{} (parenthetical, ONE argument; \citep[p.~3]{x} for pages).
+%%   8 pp at submission (+1 camera-ready); \section*{Impact Statement} (required)
+%%   after \clearpage, before the references. Plots use \columnwidth. The kit is
+%%   not bundled: templates/venue/icml/README.md.
+%% =====================================================================
+
+% ---------- B1. Encoding --------------------------------------------------
+% T1 under BOTH engines: the venue styles select Times ("ptm"), which has no
+% TU shape; without T1, XeLaTeX falls back to Latin Modern.
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+\fi
+\usepackage[T1]{fontenc}
+
+% ---------- B2. Packages ([all] core + [current] additions) ---------------
+\usepackage{xcolor}                 % [table] comes from \PassOptionsToPackage in Part A
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{thmtools}               % provides thm-restate (restatable theorems)
+% no bm [current]: write \mathbf{} (\boldsymbol{} from amsmath if needed); with
+% bm the NeurIPS 8pt footnotes need cmmib8, which the offline tectonic cache
+% lacked (build stopped; verified).
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}               % always \begin{itemize}[leftmargin=*]
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{makecell}
+\usepackage{wrapfig}                % NeurIPS/ICLR only; never in two-column ICML
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+\usepackage{tikz}
+\usetikzlibrary{calc,shadows}
+\ifdefined\algorithmic\else         % ICML's icml2026.sty already loads these
+  \usepackage{algorithm}
+  \usepackage{algorithmic}
+\fi
+\ifdefined\hypersetup\else \usepackage{hyperref}\fi
+\ifdefined\VenueLinks \VenueLinks \fi
+% No cleveref: write "Figure~\ref{}", "Table~\ref{}", "Section~\ref{}",
+% "Appendix~\ref{}", "Equation~\ref{}" by hand (house practice types the word
+% by hand [all]; the tie only blocks a line break before the number:
+% references/latex_source.md section 3). No method-name macro: type the
+% name [all].
+
+% ---------- B3. Latin abbreviations ([all]; trailing space is intentional) ---
+% Use inside parentheses: (\ie ...), (\eg ...), (\cf Section~\ref{...}).
+% Do not type another comma or space after them.
+\providecommand{\ie}{\emph{i.e., }}
+\providecommand{\eg}{\emph{e.g., }}
+\providecommand{\etal}{\emph{et al.}}
+\providecommand{\st}{\emph{s.t. }}
+\providecommand{\etc}{\emph{etc.}}
+\providecommand{\wrt}{\emph{w.r.t.}~}
+\providecommand{\cf}{\emph{cf. }}
+\providecommand{\aka}{\emph{aka. }}
+
+% ---------- B4. Co-author / status macros ([all]) ---------------------------
+% One macro per co-author, named after that person's initials: rename \coA,
+% \coB, \coC to each co-author's initials. Coloured while drafting, black for
+% submission and camera-ready; the wrappers stay in the text. House practice
+% swaps two commented blocks; here one switch does the same.
+\newif\ifdraftcolors
+\draftcolorsfalse                  % \draftcolorstrue while drafting
+\ifdraftcolors
+  \newcommand{\coA}[1]{{\color{orange}{#1}}}
+  \newcommand{\revision}[1]{{\color{blue}{#1}}}
+  \newcommand{\rebuttal}[1]{{\color{blue}{#1}}}
+  \newcommand{\draft}[1]{{\color{purple}{#1}}}
+  \newcommand{\warning}[1]{{\color{red}{#1}}}
+\else
+  \newcommand{\coA}[1]{{\color{black}{#1}}}
+  \newcommand{\revision}[1]{{\color{black}{#1}}}
+  \newcommand{\rebuttal}[1]{{\color{black}{#1}}}
+  \newcommand{\draft}[1]{{\color{black}{#1}}}
+  \newcommand{\warning}[1]{{\color{black}{#1}}}
+\fi
+% ---------- B4b. Key concepts ([most] papers mark them; references/concepts.md) --
+% ONE colour for every concept (house preference: a single orange).
+% Colour is ON by default for drafting/review; \showconceptsfalse before the
+% submission/camera-ready build renders everything black (house practice).
+% Declare each concept once in the concept table of the main file
+% ("% concept: <phrase> | core/framing | borrowed: <citekey> "<quote>" / composed: ... /
+% coined | <definition>"; other key terms as "% term:" lines, concepts.md section 3), mark it
+% with \concept{<phrase>} at first mention, and echo the SAME phrase later.
+% Budget: 2-5 core (max 6) + <= 6 framing, 8-15 marked uses (cap 20),
+% Introduction + first formal definition only. Borrow terms before coining.
+\newif\ifshowconcepts
+\showconceptstrue                 % \showconceptsfalse for submission
+\definecolor{conceptcolor}{named}{orange}   % xcolor's orange, as in the drafting macros (B4)
+\newcommand{\concept}[1]{\ifshowconcepts{\color{conceptcolor}#1}\else{#1}\fi}
+
+\newcommand{\coB}[1]{{\color{black}{#1}}}     % senior co-author edits
+\newcommand{\coC}[1]{{\color{black}{#1}}}
+\newcommand{\possible}[1]{{\color{black}{#1}}}
+\newcommand{\ignore}[1]{}                     % park deleted text inline [some]
+\newcommand{\yes}[1]{{\color{teal}{#1}}}
+\newcommand{\no}[1]{{\color{red}{#1}}}
+
+% ---------- B5. Math kit ([all]; guarded against ICLR's math_commands.tex) ---
+\ifdefined\argmax\else \DeclareMathOperator*{\argmax}{arg\,max}\fi
+\ifdefined\argmin\else \DeclareMathOperator*{\argmin}{arg\,min}\fi
+\ifdefined\sign\else   \DeclareMathOperator{\sign}{sign}\fi
+\ifdefined\Tr\else     \DeclareMathOperator{\Tr}{Tr}\fi
+\ifdefined\ab\else     \let\ab\allowbreak\fi
+\providecommand\norm[1]{\left\lVert#1\right\rVert}
+\providecommand{\Lapl}{\mathbf{\mathop{\mathcal{L}}}}   % losses: \Lapl_{\text{Name}}
+\providecommand{\Trans}[1]{{#1}^{\top}}
+\providecommand{\Bracs}[1]{\left({#1}\right)}
+\providecommand{\Mat}[1]{\mathbf{#1}}
+\providecommand{\Space}[1]{\mathbb{#1}}
+\providecommand{\Set}[1]{\mathcal{#1}}
+\providecommand{\ParaTitle}[1]{\noindent\textbf{#1}}
+\providecommand\myeq{\mathrel{\stackrel{\makebox[0pt]{\mbox{\normalfont\tiny def}}}{=}}}
+\providecommand\eqc{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily c}}}{=}}}
+% Definitions: use \triangleq [current].
+
+% ---------- B6. Theorem environments (two numbering schemes, each [some]) ---
+%  * Headline theorem: restatable and numbered within the section, printing
+%    "Theorem 3.1"; \MainTheorem* restates it in the appendix. Use it when the
+%    paper has ONE headline result (references/math.md section 2).
+%  * Definitions and lemmas: plain counters with no section prefix, printing
+%    "Definition 1" and "Lemma 1" [current]. Use them in every theory paper.
+%  * The shared-counter set (theorem/proposition/lemma/... numbered within the
+%    section) that the NeurIPS and ICML templates ship is NOT used here. ICML's
+%    kit prefers it (a preference, not a rule): to follow it, replace this block
+%    with the template's (references/venues.md section 3.4).
+% Usage: \begin{restatable}{thm}{MainTheorem} ... \end{restatable}; appendix: \MainTheorem*
+\declaretheorem[name=Theorem,numberwithin=section]{thm}        % headline, restatable
+\newtheorem{definition}{Definition}                           % plain counter
+\newtheorem{lemma}{Lemma}                                     % plain counter
+% [skill choice]: the same plain counters for the remaining kinds, and a
+% non-restatable "theorem" that shares thm's counter.
+\newtheorem{theorem}[thm]{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{assumption}{Assumption}
+\newtheorem{remark}{Remark}
+% For objectives that are derived rather than proved [some]:
+\newenvironment{derivation_out}{\renewcommand{\proofname}{Derivation Outline}\proof}{\endproof}
+\newenvironment{derivation_full}{\renewcommand{\proofname}{Full Derivation}\proof}{\endproof}
+
+% ---------- B7. Colours ----------------------------------------------------
+% (a) tables
+\definecolor{+}{rgb}{0.70,0.13,0.13}          % #B32121 gain:  $^{\color{+}+1.15}$ [some]
+\definecolor{-}{rgb}{0.25,0.41,0.88}          % #4069E0 drop:  $^{\color{-}-0.42}$ [some]
+\definecolor{up}{rgb}{0.70,0.13,0.13}         % readable aliases
+\definecolor{down}{rgb}{0.25,0.41,0.88}
+\definecolor{oursrow}{gray}{0.95}             % #F2F2F2 our row (gray)
+\definecolor{oursrowblue}{RGB}{239,246,251}   % #EFF6FB our row (blue; ICML-safe)
+\definecolor{qualityrowcolor}{RGB}{255,248,249} % #FFF8F9 quality rows [some]
+\definecolor{costrowcolor}{RGB}{246,249,254}     % #F6F9FE cost rows [some]
+% (b) semantic text and case-study box colours [most]
+\definecolor{good}{RGB}{58,113,104}
+\definecolor{bad}{RGB}{180,0,0}
+\definecolor{badboxborder}{RGB}{180,0,0}
+\definecolor{goodboxborder}{RGB}{81,91,131}   % = accent-B outline in the diagrams
+\definecolor{badboxbg}{RGB}{255,250,250}
+\definecolor{goodboxbg}{RGB}{251,252,254}
+\definecolor{titlebg}{RGB}{77,77,77}          % prompt-box title bar
+% (c) role colours shared with diagrams and plots [current]; rename per paper
+\definecolor{roleA}{RGB}{220,105,123}         % #DC697B (role A)
+\definecolor{roleB}{RGB}{22,78,164}           % #164EA4 (role / mode B)
+% (d) algorithm phase shading [current]
+\definecolor{PhaseABg}{RGB}{234,208,228}      % e.g. Sampling
+\definecolor{PhaseBBg}{RGB}{250,235,206}      % e.g. Scoring
+\definecolor{PhaseCBg}{RGB}{217,215,219}      % e.g. Updating
+% (e) plot palette as LaTeX colours (same hex as templates/plot_style.py)
+\definecolor{plotblue}{HTML}{649CD8}
+\definecolor{plotbluelight}{HTML}{BFD8EF}
+\definecolor{plotpink}{HTML}{FF85A1}
+\definecolor{plotpinklight}{HTML}{FFDAE2}
+\definecolor{plotgray}{HTML}{595959}
+
+% ---------- B8. Table helpers ----------------------------------------------
+\newcommand{\pend}{--}                            % pending result cell (no data yet)
+\newcommand{\ablation}[1]{{\color{gray}{#1}}}     % greyed ablation row [some]
+% Set \renewcommand{\arraystretch}{0.9} INSIDE each table float, never globally.
+% \shrinktofit{<max width>}{<tabular>} -- [skill choice].
+% House practice writes \resizebox{w\linewidth}{!}{...}, which also ENLARGES a
+% table narrower than w (its text then prints larger than body text). This
+% wrapper scales only when the tabular is wider than <max width>, so wide
+% tables look exactly like the house tables and narrow ones keep body-text size.
+\newsavebox{\shrinkbox}
+\newcommand{\shrinktofit}[2]{%
+  \sbox{\shrinkbox}{#2}%
+  \ifdim\wd\shrinkbox>#1\relax\resizebox{#1}{!}{\usebox{\shrinkbox}}%
+  \else\usebox{\shrinkbox}\fi}
+
+% ---------- B9. Figure placeholder (drafts without results) ----------------
+% \figplaceholder[<height>]{<what the panel will show>}
+\newcommand{\figplaceholder}[2][3cm]{%
+  \fbox{\parbox[c][#1][c]{0.94\linewidth}{\centering\footnotesize\ttfamily #2}}}
+
+% ---------- B10. Prompt and case-study boxes ([most]) ------------------------
+\newtcolorbox{gptpromptbox}[1][]{colback=white,colframe=black,boxrule=1pt,arc=2pt,
+  width=\linewidth,boxsep=2pt,left=2pt,right=2pt,top=2pt,bottom=2pt,
+  title={PROMPT:},fonttitle=\bfseries,coltitle=white,colbacktitle=titlebg,#1}
+\newtcolorbox{promptbox}[1][]{colback=white,colframe=black,boxrule=1pt,sharp corners,
+  width=\linewidth,boxsep=2pt,left=2pt,right=2pt,top=2pt,bottom=2pt,#1}
+\newtcolorbox{shadowpromptbox}[1][]{colback=white,colframe=black,boxrule=1pt,arc=2pt,
+  width=\linewidth,boxsep=2pt,left=2pt,right=2pt,top=2pt,bottom=2pt,
+  enhanced,drop fuzzy shadow=black!15!white,#1}                      % [current]
+\newtcolorbox{badcasebox}{colback=badboxbg,colframe=badboxborder,sharp corners,
+  boxrule=0.6pt,left=1pt,right=1pt,top=1pt,bottom=1pt}
+\newtcolorbox{goodcasebox}{colback=goodboxbg,colframe=goodboxborder,sharp corners,
+  boxrule=0.6pt,left=1pt,right=1pt,top=1pt,bottom=1pt}
+\newsavebox{\PromptBoxA}
+\newsavebox{\CaseStudy}
+
+% ---------- B11. Algorithm helpers ([current]) ------------------------------
+\newcommand{\CommentBelow}[1]{{\color{gray}\footnotesize // #1}}
+\newcommand{\Cmt}[1]{\hfill{\color{gray}\footnotesize // #1}}
+\providecommand{\BREAK}{\STATE \textbf{break}}
+\pgfdeclarelayer{algobg}
+\pgfsetlayers{algobg,main}
+\newcommand{\tikzmk}[1]{\tikz[remember picture,overlay]\node[inner sep=0pt,outer sep=0pt](#1){};}
+\newlength{\algoboxshiftx}\setlength{\algoboxshiftx}{-0.6em} % aligns in one and two columns (ICML skeleton);
+                                                            % re-check if a mark sits at the end of a comment line
+\newlength{\algoboxpadxL}\setlength{\algoboxpadxL}{0.6em}
+\newlength{\algoboxpadxR}\setlength{\algoboxpadxR}{-1.2em}
+\newlength{\algoboxpadyT}\setlength{\algoboxpadyT}{1.7ex}
+\newlength{\algoboxpadyB}\setlength{\algoboxpadyB}{0.8ex}
+% usage: \STATE \tikzmk{A}\CommentBelow{...} ... \STATE ...\tikzmk{B}
+%        after \end{algorithmic}:  \boxit[Label]{PhaseABg}{A}{B}
+% \boxit must sit OUTSIDE algorithmic; tikz marks need two compile passes.
+\newcommand{\boxit}[4][]{%
+\begin{tikzpicture}[remember picture,overlay]
+\begin{pgfonlayer}{algobg}
+  \coordinate (ALG@NW) at ([xshift=\algoboxshiftx-\algoboxpadxL,yshift=\algoboxpadyT]#3);
+  \coordinate (ALG@SE) at ([xshift=\algoboxshiftx+\dimexpr\linewidth+\algoboxpadxR\relax,
+                            yshift=-\algoboxpadyB]#3 |- #4);
+  \fill[#2, opacity=0.14, rounded corners=2pt] (ALG@NW) rectangle (ALG@SE);
+  \if\relax\detokenize{#1}\relax\else
+    \node[anchor=south east, font=\scriptsize\bfseries, text=black!70]
+      at ([xshift=-0.2em,yshift=0.2ex]ALG@SE) {#1};
+  \fi
+\end{pgfonlayer}
+\end{tikzpicture}%
+}

@@ -1,0 +1,51 @@
+\section{Preliminary}
+% Roadmap; 2.1 task; 2.2 base paradigm (mixing rules) ending with the limitation.
+Section~\ref{sec:task-formulation} first defines test-time normalization.
+After that, Section~\ref{sec:base-paradigm} writes the existing rules as one family of mixed statistics and explains why small batches are hard for them.
+
+\subsection{Task Formulation} \label{sec:task-formulation}
+\textbf{Fully test-time adaptation.} We start from a classifier $f$ trained on a source distribution $\mathcal{P}^{\text{src}}$ and deployed on a shifted target distribution $\mathcal{P}^{\text{tgt}}$ \cite{TENT}.
+Unlabelled test inputs arrive in batches $\mathcal{B} = \{\mathbf{x}_i\}_{i=1}^{n}$ of a small size $n$, and the model must predict each batch without labels, source data or further training.
+We consider the setting in which each batch is drawn independently from $\mathcal{P}^{\text{tgt}}$ and the model keeps no memory across batches, which isolates the effect of the batch size.
+This setting matches the evaluation of test-time normalization in prior work \cite{PredictionBN, BN-Adapt}, and it is the hardest one for batch statistics, since no evidence accumulates over time.
+
+\textbf{Batch normalization.} Consider one BN layer with $C$ channels \cite{BatchNorm}.
+For a feature map $\mathbf{h} \in \mathbb{R}^{C \times H \times W}$, the layer outputs:
+\begin{equation}\label{eq:bn}
+\mathrm{BN}(\mathbf{h}) = \boldsymbol{\gamma} \odot \frac{\mathbf{h} - \boldsymbol{\mu}}{\sqrt{\mathbf{v} + \epsilon}} + \boldsymbol{\beta},
+\end{equation}
+where $\boldsymbol{\gamma}, \boldsymbol{\beta} \in \mathbb{R}^{C}$ are the learned affine parameters, $\boldsymbol{\mu}, \mathbf{v} \in \mathbb{R}^{C}$ are the mean and variance used for normalization (broadcast over the spatial positions), and $\epsilon$ is a small constant.
+After training, the layer stores the source statistics $\boldsymbol{\mu}^{\text{src}}$ and $\mathbf{v}^{\text{src}}$ (running averages over the training data), and the standard model uses them for each test input.
+
+\subsection{Mixed Statistics for Test-Time Normalization} \label{sec:base-paradigm}
+\textbf{Per-sample and batch statistics.} For test sample $i$, let $\mathbf{m}_i \in \mathbb{R}^{C}$ be the spatial mean of its feature map and $\mathbf{u}_i \in \mathbb{R}^{C}$ the spatial mean of $(\mathbf{h}_i - \boldsymbol{\mu}^{\text{src}})^2$, its second moment about the source mean.
+The test batch statistics are then:
+\begin{equation}\label{eq:batch-stats}
+\begin{aligned}
+\hat{\boldsymbol{\mu}} &= \tfrac{1}{n}\textstyle\sum_{i=1}^{n} \mathbf{m}_i, \qquad \hat{\mathbf{u}} = \tfrac{1}{n}\textstyle\sum_{i=1}^{n} \mathbf{u}_i,\\
+\hat{\mathbf{v}} &= \hat{\mathbf{u}} - (\hat{\boldsymbol{\mu}} - \boldsymbol{\mu}^{\text{src}})^{2},
+\end{aligned}
+\end{equation}
+where $\hat{\mathbf{v}}$ is the usual batch variance over all $nHW$ positions, written through $\hat{\mathbf{u}}$ so that both statistics are averages of independent per-sample terms.
+
+\textbf{Mixing rules.} Existing test-time normalization methods replace $\boldsymbol{\mu}$ in Equation~\ref{eq:bn} by a convex combination of the two statistics:
+\begin{equation}\label{eq:mixing}
+\boldsymbol{\mu}(\lambda) = \boldsymbol{\mu}^{\text{src}} + \lambda\,(\hat{\boldsymbol{\mu}} - \boldsymbol{\mu}^{\text{src}}), \qquad \lambda \in [0, 1],
+\end{equation}
+and treat the variance in the same way.
+The source model is $\lambda{=}0$ and TBN \cite{PredictionBN} is $\lambda{=}1$.
+Prior-BN \cite{BN-Adapt} reads the source statistics as a prior worth $N$ samples and sets $\lambda = n/(n+N)$, recommending $N \in [8, 128]$ for small batches.
+$\alpha$-BN \cite{AlphaBN} mixes the means and standard deviations with a constant $\lambda = 1 - \alpha$, with $\alpha{=}0.9$ for classification.
+This weight does not depend on $n$, and $\alpha$-BN keeps most of the source statistics even when a large batch would allow a precise estimate.
+Methods that additionally train the affine parameters, such as TENT \cite{TENT}, build on the same statistics.
+Other rules set $\lambda$ through a schedule over the test stream \cite{DUA} or learn one weight per layer on augmented source data before deployment \cite{TTN}.
+Whether set by a hyperparameter, a schedule or a training phase, the weight is decided before the test batch arrives.
+
+\textbf{Noise of the batch statistics.} The per-sample means $\mathbf{m}_i$ of a batch are independent draws.
+As a result, the batch mean $\hat{\boldsymbol{\mu}}$ has covariance $\operatorname{diag}(\boldsymbol{\tau}^2)/n$, where $\boldsymbol{\tau}^2$ collects the between-sample variances of the channel means.
+For $n{=}1$, this noise equals the full spread of single images, and TBN normalizes each image by its own statistics, which can remove the global contrast and brightness that the classifier relies on.
+The same holds for $\hat{\mathbf{u}}$ with the between-sample variances $\boldsymbol{\rho}^2$ of the second moments.
+In contrast, the shift $\boldsymbol{\mu}^{\text{tgt}} - \boldsymbol{\mu}^{\text{src}}$, where $\boldsymbol{\mu}^{\text{tgt}} = \mathbb{E}_{\mathcal{P}^{\text{tgt}}}[\mathbf{m}_i]$ is the target mean, does not depend on $n$.
+Therefore, a good weight should compare the two quantities, which the rules above never do.
+Each of their weights depends only on $n$ and a hyperparameter chosen in advance.
+Still, a rule that cannot tell a batch that has moved far from one that has moved by chance leaves the statistics either stale or noisy, which limits test-time normalization exactly when batches are small.

@@ -1,0 +1,2 @@
+curl -s -L -O https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz  0.76s user 0.78s system 1% cpu 1:26.54 total
+done

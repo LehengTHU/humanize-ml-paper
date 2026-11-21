@@ -23,6 +23,16 @@ Read the [blog post](https://lehengthu.github.io/blog/2026/paper-skill-ai-detect
 - **One prompt, one complete paper.** Given a single prompt, an agent with the skill chose an idea, ran the experiments and typeset an ICML 2027 submission alone in about 82 minutes.
 - **The skill does not replace your thinking.** If the content is AI-generated to begin with, revising it with AI cannot correct it: papers written from a topic alone stay at 100% AI. A complete one-shot paper reads as human but is still labeled AI because of its length.
 
+## Advanced usage: one prompt, one complete paper
+
+The skill can also take an agent from an idea to a typeset submission. Given one prompt, Claude Opus 5.5 with the skill wrote [SourceStein](examples/sourcestein-icml2027/), a 14-page ICML 2027 submission, in a single run of 209 turns and about 82 minutes, including 37 minutes of its own experiments on a CPU-only Mac. Nobody edited the paper.
+
+<a href="examples/sourcestein-icml2027/"><img src="examples/sourcestein-icml2027/preview/pages.jpg" alt="All 14 pages of SourceStein, the paper written in one run"></a>
+
+[Read the paper](examples/sourcestein-icml2027/SourceStein.pdf) · [The prompt](examples/sourcestein-icml2027/prompt.md) · [Source, code and results](examples/sourcestein-icml2027/source/)
+
+**Risk:** for a complete generation, although the writing reads as human, it is still labeled AI because of its length.
+
 ## Install
 
 **Claude Code** (plugin marketplace):

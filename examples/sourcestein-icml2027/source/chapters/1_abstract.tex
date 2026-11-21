@@ -1,0 +1,11 @@
+% Abstract (ICML): one paragraph, 4-6 sentences, no numbers, citations or dataset names.
+% Slots: (1) context + difficulty; (2) prevailing practice + gap pair; (3) proposal with epithet; (4) mechanism; (5) guarantee; (6) evidence.
+\begin{abstract}
+Test-time normalization makes a classifier with batch normalization more robust to distribution shift by re-estimating its normalization statistics on each test batch, without any training.
+However, current methods mix source and test batch statistics with a weight fixed in advance, which causes two drawbacks: (i) under a large shift, a small weight keeps stale source statistics; and (ii) under a small batch, a large weight copies noisy batch statistics.
+To address both, we propose \textbf{SourceStein}, an adaptive and stable rule that sets the mixing weight of each layer after seeing the batch, by James--Stein shrinkage of the batch statistics toward the source statistics.
+Specifically, SourceStein measures the shift of the batch in units of the noise expected from its size, and moves toward the batch only as far as the shift exceeds this noise.
+The resulting weight is closed-form, has no hyperparameters and, under a Gaussian model, never has a higher risk than the batch statistics.
+Experiments with two networks on common image corruptions show that SourceStein generally reduces the error of prior mixing rules for small batches, while matching them for large ones.
+% Our code is available at \url{https://anonymous.4open.science/r/sourcestein}.   % anonymous link, to be added at submission
+\end{abstract}

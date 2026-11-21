@@ -1,0 +1,21 @@
+cnn8 SourceStein best on 12 of 15 corruptions at n=4
+ n=1 mean lambda_mu corrupted 0.105 clean 0.051 mean lambda_u corrupted 0.096 max-layer lambda_mu 0.18
+ n=4 mean lambda_mu corrupted 0.164 clean 0.049 mean lambda_u corrupted 0.245 max-layer lambda_mu 0.33
+ n=16 mean lambda_mu corrupted 0.230 clean 0.066 mean lambda_u corrupted 0.469 max-layer lambda_mu 0.52
+ n=64 mean lambda_mu corrupted 0.319 clean 0.133 mean lambda_u corrupted 0.722 max-layer lambda_mu 0.71
+ n=200 mean lambda_mu corrupted 0.465 clean 0.206 mean lambda_u corrupted 0.879 max-layer lambda_mu 0.81
+ clean max gap SourceStein - Source: 1.9000000000000004
+resnet14 SourceStein best on 12 of 15 corruptions at n=4
+ n=1 mean lambda_mu corrupted 0.060 clean 0.040 mean lambda_u corrupted 0.097 max-layer lambda_mu 0.20
+ n=4 mean lambda_mu corrupted 0.092 clean 0.042 mean lambda_u corrupted 0.234 max-layer lambda_mu 0.27
+ n=16 mean lambda_mu corrupted 0.155 clean 0.056 mean lambda_u corrupted 0.459 max-layer lambda_mu 0.38
+ n=64 mean lambda_mu corrupted 0.287 clean 0.110 mean lambda_u corrupted 0.697 max-layer lambda_mu 0.60
+ n=200 mean lambda_mu corrupted 0.459 clean 0.159 mean lambda_u corrupted 0.855 max-layer lambda_mu 0.78
+ clean max gap SourceStein - Source: 2.1999999999999993
+synthetic n=1 gauss scale=1.0: max(stein-oracle)=0.022 shifts where stein>TBN=0/14 zero-shift stein=0.017 prior16=0.003 tbn=1.001 largest-shift stein=0.991 prior16=88.58
+synthetic n=4 gauss scale=1.0: max(stein-oracle)=0.023 shifts where stein>TBN=0/14 zero-shift stein=0.016 prior16=0.040 tbn=0.996 largest-shift stein=0.998 prior16=256.01
+synthetic n=16 gauss scale=1.0: max(stein-oracle)=0.022 shifts where stein>TBN=0/14 zero-shift stein=0.017 prior16=0.250 tbn=0.999 largest-shift stein=0.999 prior16=400.27
+synthetic n=64 gauss scale=1.0: max(stein-oracle)=0.022 shifts where stein>TBN=0/14 zero-shift stein=0.017 prior16=0.639 tbn=0.999 largest-shift stein=0.998 prior16=256.68
+synthetic n=4 student_t3 scale=1.0: max(stein-oracle)=0.114 shifts where stein>TBN=0/14 zero-shift stein=0.070 prior16=0.039 tbn=0.976 largest-shift stein=1.006 prior16=256.04
+synthetic n=4 gauss scale=0.7: max(stein-oracle)=0.161 shifts where stein>TBN=6/14 zero-shift stein=0.000 prior16=0.020 tbn=0.490 largest-shift stein=0.489 prior16=256.02
+synthetic n=4 gauss scale=1.4: max(stein-oracle)=0.521 shifts where stein>TBN=0/14 zero-shift stein=0.516 prior16=0.078 tbn=1.960 largest-shift stein=1.958 prior16=256.09

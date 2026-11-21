@@ -1,0 +1,63 @@
+% target-width-in: 6.10
+% main_figure -- framework figure* at 0.9\textwidth (ICML), SourceStein at one BN layer.
+% Running example: a test batch of four fog-corrupted CIFAR-10 images.
+% Roles: navy = frozen source model / source statistics, neutral = computed statistics,
+% hero (filled navy) = the Stein weight (fixed rule, no training), amber dashed = scores.
+\documentclass[tikz,border=1pt]{standalone}
+\usepackage{housediagram}
+\begin{document}
+\begin{tikzpicture}
+  % ------------------------------------------------------------------ 1. test batch
+  \node[chip, tagged=1, text width=30pt] (c1) {\hdquote{ship}};
+  \node[chip, tagged=2, text width=30pt, below=4.5pt of c1] (c2) {\hdquote{cat}};
+  \node[chip, tagged=3, text width=30pt, below=4.5pt of c2] (c3) {\hdquote{car}};
+  \node[chip, tagged=4, text width=30pt, below=4.5pt of c3] (c4) {\hdquote{frog}};
+  \hdlane{batch}{(c1)(c4)}
+  \node[input square, left=11pt of batch] (D) {$\mathcal{B}$};
+  \draw[data flow] (D) -- node[note, above=0.5pt] {$n$} (batch);
+
+  % ------------------------------------------------------------------ 2. statistics
+  \node[neutral, minimum width=66pt, minimum height=33pt, anchor=north west] (bs)
+    at ([xshift=13pt]batch.east |- c1.north) {\hdtitle{Batch Statistics}\\[0.6pt] $\hat{\boldsymbol{\mu}},\ \hat{\mathbf{u}}$};
+  \node[frozen, minimum width=66pt, minimum height=33pt, anchor=south west] (src)
+    at ([xshift=13pt]batch.east |- c4.south) {\hdtitle{Source Statistics}\\[0.6pt] $\boldsymbol{\mu}^{\text{src}}, \mathbf{v}^{\text{src}}$\\[0.4pt] $\boldsymbol{\tau}^{2}, \boldsymbol{\rho}^{2}$};
+  \hdlane{stats}{(bs)(src)}
+  \draw[data flow] (batch.east |- bs.west) -- (bs.west);
+
+  % ------------------------------------------------------------------ 3. shift score
+  \node[neutral, minimum width=66pt, minimum height=35pt, right=11pt of stats] (score)
+    {\hdtitle{Shift Score}\\[1pt] $\hat{\boldsymbol{\delta}} = \hat{\boldsymbol{\mu}} - \boldsymbol{\mu}^{\text{src}}$\\[1pt] $S = n\|\hat{\boldsymbol{\delta}}\|^{2}_{\boldsymbol{\Sigma}^{-1}}$};
+  \draw[data flow] (bs.east) -- ++(7pt,0) |- ([yshift=5pt]score.west);
+  \draw[role flow=hdnavy] (src.east) -- ++(7pt,0) |- ([yshift=-5pt]score.west);
+
+  % ------------------------------------------------------------------ 4. Stein weight (focal)
+  \node[hero, minimum width=66pt, minimum height=35pt, right=12pt of score] (w)
+    {\hdtitle{Stein Weight}\\[1pt] $\hat{\lambda} = \big(1 - \tfrac{C-2}{S}\big)_{+}$};
+  \draw[score flow] (score) -- node[note, above=0.5pt] {$S$} (w);
+
+  % ------------------------------------------------------------------ 5. mixed statistics + normalization
+  \node[state, minimum width=70pt, minimum height=33pt, anchor=north west] (mix)
+    at ([xshift=13pt]w.east |- c1.north) {\hdtitle{Mixed Statistics}\\[0.6pt] $\tilde{\boldsymbol{\mu}} = \boldsymbol{\mu}^{\text{src}} + \hat{\lambda}\,\hat{\boldsymbol{\delta}}$};
+  \node[frozen, minimum width=70pt, minimum height=33pt, anchor=south west] (bn)
+    at ([xshift=13pt]w.east |- c4.south) {\hdtitle{Frozen BN Layer}\\[0.6pt] $\boldsymbol{\gamma}\odot\frac{\mathbf{x} - \tilde{\boldsymbol{\mu}}}{\sqrt{\tilde{\mathbf{v}}+\epsilon}} + \boldsymbol{\beta}$};
+  \hdlane{out}{(mix)(bn)}
+  \draw[score flow] (w.east) -- ++(7pt,0) |- (mix.west);
+  \draw[data flow] (mix) -- node[note, right=0.5pt] {$\tilde{\boldsymbol{\mu}}, \tilde{\mathbf{v}}$} (bn);
+
+  % ------------------------------------------------------------------ stage headers (one baseline)
+  \coordinate (H) at ([yshift=7pt]batch.north);
+  \node[header, anchor=base] at (batch.north |- H) {Test Batch (Fog)};
+  \node[header, anchor=base] at (stats.north |- H) {Two Statistics};
+  \node[header, anchor=base] at ($(score.west |- H)!0.5!(w.east |- H)$) {Shrinkage Weight};
+  \node[header, anchor=base] at (out.north |- H) {Normalization};
+
+  % ------------------------------------------------------------------ legend
+  \coordinate (lg) at ([yshift=-7pt]batch.south);
+  \matrix[legend row, anchor=north] at ($(D.west |- lg)!0.5!(out.east |- lg)$) {
+    \pic {key box={frozen}{Frozen / stored}}; &
+    \pic {key box={neutral}{Computed per batch}}; &
+    \pic {key box={hero}{Fixed rule}}; &
+    \pic {key arrow={score flow}{Score}}; \\
+  };
+\end{tikzpicture}
+\end{document}
