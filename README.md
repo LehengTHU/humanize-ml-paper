@@ -23,7 +23,8 @@ Read the [blog post](https://lehengthu.github.io/blog/2026/paper-skill-ai-detect
 - **One prompt, one complete paper.** Given a single prompt, an agent with the skill chose an idea, ran the experiments and typeset an ICML 2027 submission alone in about 82 minutes.
 - **The skill does not replace your thinking.** If the content is AI-generated to begin with, revising it with AI cannot correct it: papers written from a topic alone stay at 100% AI. A complete one-shot paper reads as human but is still labeled AI because of its length.
 
-**Scope:** the texts that pass the detector are mostly short ones written from a human draft. Text generated directly by AI, or a long paper, is still likely to be labeled AI.
+> [!CAUTION]
+> **Scope:** the texts that pass the detector are mostly short ones written from a human draft. Text generated directly by AI, or a long paper, is still likely to be labeled AI.
 
 ## Advanced usage: one prompt, one complete paper
 
@@ -33,7 +34,8 @@ The skill can also take an agent from an idea to a typeset submission. Given one
 
 [Read the paper](examples/sourcestein-icml2027/SourceStein.pdf) · [The prompt](examples/sourcestein-icml2027/prompt.md) · [Source, code and results](examples/sourcestein-icml2027/source/)
 
-**Risk:** for a complete generation, although the writing reads as human, it is still labeled AI because of its length.
+> [!CAUTION]
+> **Risk:** for a complete generation, although the writing reads as human, it is still labeled AI because of its length.
 
 ## Install
 
