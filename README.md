@@ -18,7 +18,7 @@ Read the [blog post](https://lehengthu.github.io/blog/2026/paper-skill-ai-detect
 
 <img src="media/result-en.png" width="760" alt="Share of text that Pangram 4.1 labels AI on four papers: 94% without the skill, 29% with the skill, 29% for the human-written text">
 
-- **Pangram largely misses the text generated with the skill.** We simulate the writing process from a draft to a finished text. On four papers, Pangram labels 94% of the text that Claude Opus 5.5 writes without the skill as AI, compared with 29% with the skill, the same as the human-written text.
+- **Text generated with the skill is less likely to be detected by Pangram.** We simulate the writing process from a draft to a finished text. On four papers, Pangram labels 94% of the text that Claude Opus 5.5 writes without the skill as AI, compared with 29% with the skill, the same as the human-written text.
 - **The text follows academic conventions.** The skill's checker finds 6 habits of machine-written drafts in the text generated with the skill, compared with 75 without it.
 - **One prompt, one complete paper.** Given a single prompt, an agent with the skill chose an idea, ran the experiments and typeset an ICML 2027 submission alone in about 82 minutes.
 - **The skill does not replace your thinking.** If the content is AI-generated to begin with, revising it with AI cannot correct it: papers written from a topic alone stay at 100% AI. A complete one-shot paper reads as human but is still labeled AI because of its length.
